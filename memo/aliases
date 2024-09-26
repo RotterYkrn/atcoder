@@ -1,0 +1,15 @@
+alias g+="g++-12 -std=gnu++20 -O2 -Wall -Wextra \
+-Wfloat-equal -Wconversion -Wlogical-op -Wshift-overflow=2 \
+-Wduplicated-cond -mtune=native -march=native \
+-fconstexpr-depth=2147483647 \
+-fconstexpr-loop-limit=2147483647 \
+-fconstexpr-ops-limit=2147483647"
+
+alias db="g++-12 -std=gnu++20 -O2 -Wall -Wextra \
+-Wfloat-equal -Wconversion -Wlogical-op -Wshift-overflow=2 \
+-Wduplicated-cond -mtune=native -march=native \
+-fconstexpr-depth=2147483647 \
+-fconstexpr-loop-limit=2147483647 \
+-fconstexpr-ops-limit=2147483647 \
+-g -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -fstack-protector \
+-fsanitize=address -fsanitize=undefined -fno-sanitize-recover"

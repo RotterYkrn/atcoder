@@ -10,11 +10,6 @@ using namespace atcoder;
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")
 struct Init { Init() { ios::sync_with_stdio(0); cin.tie(0); } }init;
-template<>
-struct std::vector<bool>: basic_string<bool> {
-    using basic_string<bool>::basic_string, basic_string<bool>::operator =;
-    explicit vector(size_t n): vector(n, false) {}
-};
 
 using ll = long long;
 using ull = unsigned long long;

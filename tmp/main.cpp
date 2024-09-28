@@ -67,11 +67,11 @@ constexpr int dx8[8] = {-1,0,1,1,1,0,-1,-1};
  mkvec<type>(n or {n1,n2,...}[, init])
 ****************************************/
 template<class T>
-inline auto mkvec(const size_t d, const T& init = T{}) noexcept {
+inline auto mkvec(const int d, const T& init = T{}) noexcept {
     return vector<T>(d, init);
 }
 template<class T, size_t n, size_t idx = 0>
-auto mkvec(const size_t (&d)[n], const T& init = T{}) noexcept {
+auto mkvec(const int (&d)[n], const T& init = T{}) noexcept {
     if constexpr (idx < n) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
     else return init;
 }

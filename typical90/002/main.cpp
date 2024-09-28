@@ -196,8 +196,20 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
 }
 
 
+void rec(const int open_count, const int close_count, const string str) {
+    if (open_count || close_count) {
+        if (open_count) rec(open_count-1, close_count+1, str+"(");
+        if (close_count) rec(open_count, close_count-1, str+")");
+    } else {
+        print(str);
+    }
+}
+
 int main() {
-    
+    inputi(N);
+
+    if (N % 2 == 0) rec(N / 2, 0, "");
+    else print();
 
     return 0;
 }

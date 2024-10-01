@@ -21,7 +21,7 @@ using pll = pair<ll,ll>;
 #define REP1(i, end) for (auto i = decay_t<decltype(end)>{}; (i) != (end); ++(i))
 #define REP2(i, begin, end) for (auto i = (begin); (i) != (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1)(__VA_ARGS__)
-// reveres loop [rend,rbegin)
+// loop [rend,rbegin)
 #define RREP1(i, rbegin) for (auto i = (rbegin-1); i >= 0; i--)
 #define RREP2(i, rbigin, rend) for (auto i = (rend-1); (i) >= (rbegin); i--)
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
@@ -196,8 +196,20 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
 }
 
 
+void rec(const int open_count, const int close_count, const string str) {
+    if (open_count || close_count) {
+        if (open_count) rec(open_count-1, close_count+1, str+"(");
+        if (close_count) rec(open_count, close_count-1, str+")");
+    } else {
+        print(str);
+    }
+}
+
 int main() {
-    
+    inputi(N);
+
+    if (N % 2 == 0) rec(N / 2, 0, "");
+    else print();
 
     return 0;
 }

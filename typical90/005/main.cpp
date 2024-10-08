@@ -19,7 +19,7 @@ using pll = pair<ll,ll>;
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
 #define REP1(i, end) for (auto i = decay_t<decltype(end)>{}; (i) != (end); ++(i))
-#define REP2(i, begin, end) for (auto i = (begin); (i) != (end); ++(i))
+#define REP2(i, begin, end) for (auto i = static_cast<decltype(end)>(begin); (i) != (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1)(__VA_ARGS__)
 // loop [rend,rbegin)
 #define RREP1(i, rbegin) for (auto i = (rbegin-1); i >= 0; i--)
@@ -195,9 +195,31 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
     return minValue;
 }
 
+constexpr int mod = 1000000007;
 
 int main() {
+    ll N; cin>>N;
+    inputi(B,K);
+
+    auto nums = vi(K);
+    rep(i,K) cin>>nums[i];
     
+    auto modB = vi(B);
+    rep(i,B) modB[i] = (i * 10) % B;
+
+    auto ans = mkvec<long>({2,B});
+    for (auto n: nums) ans[0][n % B] += 1;
+    rep(digit, 1LL, N) {
+        for (auto &n: nums) n = modB[n % B];
+        rep(i,B) {
+            for (const auto n: nums) {
+                ans[digit % 2][(i + n) % B] = (ans[digit % 2][(i + n) % B] + ans[(digit - 1) % 2][i]) % mod;
+            }
+            ans[(digit - 1) % 2][i] = 0;
+        }
+    }
+
+    print(ans[(N-1)%2][0]);
 
     return 0;
 }

@@ -197,7 +197,21 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
 
 
 int main() {
-    
+    inputi(H,W);
+
+    auto A = vi({H,W});
+    rep(i,H) rep(j,W) cin>>A[i][j];
+
+    auto col = vi(W), row = vi(H);
+    rep(i,H) rep(j,W) {
+        col[j] += A[i][j];
+        row[i] += A[i][j];
+    }
+
+    auto ans = vi({H,W});
+    rep(i,H) rep(j,W) ans[i][j] = col[j] + row[i] - A[i][j];
+
+    print(ans);
 
     return 0;
 }

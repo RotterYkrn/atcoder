@@ -19,11 +19,11 @@ using pll = pair<ll,ll>;
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
 #define REP1(i, end) for (auto i = decay_t<decltype(end)>{}; (i) != (end); ++(i))
-#define REP2(i, begin, end) for (auto i = static_cast<decltype(end)>(begin); (i) != (end); ++(i))
+#define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1)(__VA_ARGS__)
 // reveres loop [rend,rbegin)
 #define RREP1(i, rbegin) for (auto i = (rbegin-1); i >= 0; i--)
-#define RREP2(i, rbigin, rend) for (auto i = static_cast<decltype(rbigin)>(rend-1); (i) >= (rbegin); i--)
+#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rbigin)>{rend-1}; (i) >= (rbegin); i--)
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
 #define INRANGE1(x, r) (0 <= x && x < r)

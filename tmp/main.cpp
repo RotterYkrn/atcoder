@@ -52,6 +52,7 @@ using pll = pair<ll,ll>;
 
 constexpr int inf = 1073741823;
 constexpr ll infl = 1LL << 60;
+constexpr int mod = 1000000007;
 const string ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const string abc = "abcdefghijklmnopqrstuvwxyz";
 

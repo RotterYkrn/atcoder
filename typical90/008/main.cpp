@@ -19,11 +19,11 @@ using pll = pair<ll,ll>;
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
 #define REP1(i, end) for (auto i = decay_t<decltype(end)>{}; (i) != (end); ++(i))
-#define REP2(i, begin, end) for (auto i = (begin); (i) != (end); ++(i))
+#define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1)(__VA_ARGS__)
-// loop [rend,rbegin)
+// reveres loop [rend,rbegin)
 #define RREP1(i, rbegin) for (auto i = (rbegin-1); i >= 0; i--)
-#define RREP2(i, rbigin, rend) for (auto i = (rend-1); (i) >= (rbegin); i--)
+#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rbigin)>{rend-1}; (i) >= (rbegin); i--)
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
 #define INRANGE1(x, r) (0 <= x && x < r)
@@ -195,9 +195,28 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
     return minValue;
 }
 
+constexpr int mod = 1e9 + 7;
+const string ac = "atcoder";
 
 int main() {
-    
+    inputi(N);
+    inputs(S);
+
+    int K = (int)ac.size();
+    auto s = mkvec<long>({K, N});
+    rep(c, K) {
+        if (S[c] == ac[c]) s[c][c] = 1;
+        else break;
+    }
+    rep(c, K) {
+        rep(i, c + 1, N) {
+            s[c][i] = s[c][i - 1];
+            if (S[i] == ac[c]) s[c][i] += (c != 0 ? s[c - 1][i] : 1);
+            s[c][i] %= mod;
+        }
+    }
+
+    print(s[K - 1][N - 1]);
 
     return 0;
 }

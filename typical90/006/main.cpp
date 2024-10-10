@@ -19,11 +19,11 @@ using pll = pair<ll,ll>;
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
 #define REP1(i, end) for (auto i = decay_t<decltype(end)>{}; (i) != (end); ++(i))
-#define REP2(i, begin, end) for (auto i = (begin); (i) != (end); ++(i))
+#define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1)(__VA_ARGS__)
-// loop [rend,rbegin)
+// reveres loop [rend,rbegin)
 #define RREP1(i, rbegin) for (auto i = (rbegin-1); i >= 0; i--)
-#define RREP2(i, rbigin, rend) for (auto i = (rend-1); (i) >= (rbegin); i--)
+#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rbigin)>{rend-1}; (i) >= (rbegin); i--)
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
 #define INRANGE1(x, r) (0 <= x && x < r)
@@ -197,7 +197,29 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
 
 
 int main() {
-    
+    inputi(N,K);
+    inputs(S);
+
+    auto nex = vi({N + 1, 26}, N);
+    rrep(i,N) {
+        nex[i] = nex[i + 1];
+        nex[i][S.at(i) - 'a'] = i;
+    }
+
+    string ans = "";
+    int j = 0;
+    rep(i,K) {
+        rep(c,'a','z') {
+            int k = nex[j][c - 'a'];
+            if (N - k >= K - i) {
+                ans += c;
+                j = k + 1;
+                break;
+            }
+        }
+    }
+
+    print(ans);
 
     return 0;
 }

@@ -197,7 +197,26 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
 
 
 int main() {
-    
+    inputi(N);
+    auto A = mkvec<ll>(N);
+    rep(i,N) cin>>A[i];
+
+    sort(all(A));
+
+    inputi(Q);
+    rep(i,Q) {
+        ll B; cin>>B;
+        
+        int left = 0, right = N - 1;
+        while (left < right) {
+            int mid = left + (right - left + 1) / 2;
+            if (A[mid] <= B) left = mid;
+            else right = mid - 1;
+        }
+
+        if (left != N - 1) print(min(abs(A[left] - B), abs(A[left + 1] - B)));
+        else print(abs(A[left] - B));
+    }
 
     return 0;
 }

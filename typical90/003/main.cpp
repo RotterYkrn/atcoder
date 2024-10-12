@@ -195,9 +195,35 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
     return minValue;
 }
 
+void rec(int v, const auto &graph, auto &depth) {
+    for (auto nv: graph[v]) {
+        if (depth[nv] == -1) {
+            depth[nv] = depth[v] + 1;
+            rec(nv, graph, depth);
+        }
+    }
+}
 
 int main() {
-    
+    inputi(N);
+
+    auto graph = vi({N,0});
+    rep(i,N-1) {
+        inputi(A,B);
+        graph[A-1].pb(B-1);
+        graph[B-1].pb(A-1);
+    }
+
+    auto depth = vi(N,-1);
+    depth[0] = 0;
+    rec(0, graph, depth);
+
+    const int max_v = (int)distance(depth.begin(), find(all(depth), max(depth)));
+    fill(all(depth), -1);
+    depth[max_v] = 0;
+    rec(max_v, graph, depth);
+
+    print(max(depth) + 1);
 
     return 0;
 }

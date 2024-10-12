@@ -197,7 +197,19 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
 
 
 int main() {
-    
+    inputs(S,T);
+
+    if (S == T) {
+        print(0);
+    } else {
+        rep(i,min(S.size(),T.size())) {
+            if (S.at(i) != T.at(i)) {
+                print(i+1);
+                return 0;
+            }
+        }
+        print(min(S.size(),T.size())+1);
+    }
 
     return 0;
 }

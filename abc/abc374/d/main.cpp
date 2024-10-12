@@ -195,9 +195,42 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
     return minValue;
 }
 
+int N,S,T;
+double rec(int bit, int v, int point, const auto &line, auto &dp) {
+    if (!Equals(dp[bit][v][point], -1.0)) return dp[bit][v][point];
+    if (bit == 1<<v) return dp[bit][v][point] = hypot(abs(line[v][1][0]-line[v][0][0]), abs(line[v][1][1]-line[v][0][1])) * T;
+
+    double res = numeric_limits<double>::max();
+    int prev_bit = bit & ~(1<<v);
+
+    rep(i,N) {
+        if (!(prev_bit & (1<<i))) continue;
+        rep(j,2) {
+            double time = 0.0;
+            if (bit == (1<<N)) {
+                time = hypot(abs(line[v][point][0]), abs(line[v][point][1])) * S;
+            }
+            time += hypot(abs(line[v][1][0]-line[v][0][0]), abs(line[v][1][1]-line[v][0][1])) * T;
+            time += hypot(abs(line[v][(point+1)%2][0]-line[i][j][0]), abs(line[v][(point+1)%2][1]-line[i][j][1])) * S;
+            chmin(res, rec(prev_bit, i, j, line, dp) + time);
+        }
+    }
+
+    return dp[bit][v][point] = res;
+}
 
 int main() {
+    cin>>N>>S>>T;
+    auto line = vi({N,2,2});
+    rep(i,N) rep(j,2) rep (k,2) cin >> line[i][j][k];
     
+    double ans = numeric_limits<double>::max();
+    auto dp = mkvec<double>({1<<10, 10, 2}, -1.0);
+    rep(i,N) rep(j,2) {
+        chmin(ans, rec((1<<N)-1, i, j, line, dp));
+    }
+
+    print(ans);
 
     return 0;
 }

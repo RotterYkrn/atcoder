@@ -197,7 +197,9 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
 
 
 int main() {
-    
+    inputs(S);
+
+    YesNo(S.ends_with("san"));
 
     return 0;
 }

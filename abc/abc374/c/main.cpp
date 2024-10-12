@@ -195,9 +195,29 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
     return minValue;
 }
 
-
 int main() {
-    
+    inputi(N);
+    auto K = vi(N);
+    ll sum = 0;
+    rep(i,N) {
+        cin>>K[i];
+        sum += K[i];
+    }
+
+    long bin = 1L;
+    ll ans = infl;
+    while (bin < (1 << N) - 1) {
+        long b = bin++;
+        ll res = 0LL;
+        rep(j,N) {
+            if (b == 0L) break;
+            if (b & 1) res += (long)K[j];
+            b >>= 1;
+        }
+        chmin(ans, max(res, sum-res));
+    }
+
+    print(ans);
 
     return 0;
 }

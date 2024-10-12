@@ -9,7 +9,7 @@ using namespace atcoder;
 #pragma GCC target("avx")
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")
-struct Init { Init() { ios::sync_with_stdio(0); cin.tie(0); } }init;
+// struct Init { Init() { ios::sync_with_stdio(0); cin.tie(0); } }init;
 
 using ll = long long;
 using ull = unsigned long long;
@@ -193,7 +193,19 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
 
 
 int main() {
-    
+    inputi(N);
+
+    inputi(x,y);
+    double ans = 0.0;
+    ans += hypot(abs(x), abs(y));
+    rep(i,N-1) {
+        inputi(nx, ny);
+        ans += hypot(abs(nx - x), abs(ny - y));
+        x = nx; y = ny;
+    }
+
+    ans += hypot(abs(x), abs(y));
+    printf("%.10f\n", ans);
 
     return 0;
 }

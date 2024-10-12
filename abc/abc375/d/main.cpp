@@ -193,7 +193,27 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
 
 
 int main() {
-    
+    inputs(S);
+    long N = (int)S.size();
+    auto place = mkvec<long>({26,0});
+
+    rep(i,N) {
+        place[S[i] - 'A'].pb(i);
+    }
+
+    long ans = 0;
+    rep(i,26) {
+        long n = (int)place[i].size();
+        if (n < 2) continue;
+        rep(j,n - 1) {
+            long bw = place[i][j + 1] - place[i][j] - 1;
+            long tmp = bw * (j + 1) * (n - j - 1);
+            if (j != 0) tmp += j * (n - j - 1);
+            ans += tmp;
+        }
+    }
+
+    print(ans);
 
     return 0;
 }

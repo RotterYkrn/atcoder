@@ -193,7 +193,17 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
 
 
 int main() {
-    
+    inputi(N);
+    inputs(S);
+
+    int ans = 0;
+    if (S.size() >= 3) {
+    rep(i,1,N-1) {
+        if (S[i-1] == '#' && S[i] == '.' && S[i+1] == '#') ans++;
+    }
+    }
+
+    print(ans);
 
     return 0;
 }

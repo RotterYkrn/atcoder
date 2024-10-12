@@ -191,9 +191,46 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
     return minValue;
 }
 
+int N;
+char change_color(int n, int i, int j, const auto &A) {
+    switch (n % 4) {
+        case 0:
+            return A[N - j - 1][i];
+            break;
+        case 1:
+            return A[N - 1 - i][N - 1 - j];
+            break;
+        case 2:
+            return A[j][N - 1 - i];
+        case 3:
+            return A[i][j];
+        default:
+            return 'a';
+    }
+}
 
 int main() {
-    
+    cin >> N;
+    auto A = mkvec<string>(N);
+    rep(i,N) {
+        inputs(s);
+        A[i] += s;
+    }
+
+    auto ans = A;
+    rep(i,(int)(N/2)) {
+        int head = i, tail = N - i - 1;
+        rep(j, head, tail + 1) {
+            ans[head][j] = change_color(i, head, j, A);
+            ans[tail][j] = change_color(i, tail, j, A);
+        }
+        rep(j, head + 1, tail) {
+            ans[j][head] = change_color(i, j, head, A);
+            ans[j][tail] = change_color(i, j, tail, A);
+        }
+    }
+
+    print(ans);
 
     return 0;
 }

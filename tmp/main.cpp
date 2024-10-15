@@ -18,9 +18,10 @@ using pll = pair<ll,ll>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
+#define REP0(end) for (auto _ = decay_t<decltype(end)>{}; (_) != (end); ++(_))
 #define REP1(i, end) for (auto i = decay_t<decltype(end)>{}; (i) != (end); ++(i))
 #define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
-#define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1)(__VA_ARGS__)
+#define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1, REP0)(__VA_ARGS__)
 // reveres loop [rend,rbegin)
 #define RREP1(i, rbegin) for (auto i = (rbegin-1); i >= 0; i--)
 #define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rbigin)>{rend-1}; (i) >= (rbegin); i--)

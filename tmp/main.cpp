@@ -120,6 +120,7 @@ void input_cin(First& first, Rest&... rest) {
     input_cin(rest...); // recursive call using pack expansion syntax
 }
 #define inputi(...) int __VA_ARGS__; input_cin(__VA_ARGS__);
+#define inputll(...) ll __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputs(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
 template <class T>
 inline auto inputv(const int d) {

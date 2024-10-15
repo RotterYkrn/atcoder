@@ -73,8 +73,8 @@ inline auto mkvec(const int d, const T& init = T{}) noexcept {
 }
 template<class T, size_t n, size_t idx = 0>
 auto mkvec(const int (&d)[n], const T& init = T{}) noexcept {
-    if constexpr (idx < n) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
-    else return init;
+    if constexpr (idx < n - 1) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
+    else return mkvec<T>(d[idx], init);
 }
 
 /***************************************
@@ -120,6 +120,28 @@ void input_cin(First& first, Rest&... rest) {
 }
 #define inputi(...) int __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputs(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
+template <class T>
+inline auto inputv(const int d) {
+    vector<T> vec(d);
+    for (int i = 0; i < d; i++) {
+        cin >> vec[i];
+    }
+    return vec;
+}
+template<class T, size_t n, size_t idx = 0>
+auto inputv(const int (&d)[n]) noexcept {
+    if constexpr (idx < n - 1) {
+        int d_make[n - idx];
+        copy(begin(d) + idx, end(d), begin(d_make));
+        auto vec = mkvec<T>(d_make);
+        for (int i = 0; i < (int)vec.size(); i++) {
+            vec[i] = inputv<T, n, idx + 1>(d);
+        }
+        return vec;
+    } else {
+        return inputv<T>(d[idx]);
+    }
+}
 
 /*************************
  Pythonのprintみたいなやつ

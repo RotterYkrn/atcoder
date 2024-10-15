@@ -9,7 +9,7 @@ using namespace atcoder;
 #pragma GCC target("avx")
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")
-struct Init { Init() { ios::sync_with_stdio(0); cin.tie(0); } }init;
+// struct Init { Init() { ios::sync_with_stdio(0); cin.tie(0); } }init;
 
 using ll = long long;
 using ull = unsigned long long;
@@ -19,11 +19,11 @@ using pll = pair<ll,ll>;
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
 #define REP1(i, end) for (auto i = decay_t<decltype(end)>{}; (i) != (end); ++(i))
-#define REP2(i, begin, end) for (auto i = (begin); (i) != (end); ++(i))
+#define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1)(__VA_ARGS__)
-// loop [rend,rbegin)
+// reveres loop [rend,rbegin)
 #define RREP1(i, rbegin) for (auto i = (rbegin-1); i >= 0; i--)
-#define RREP2(i, rbigin, rend) for (auto i = (rend-1); (i) >= (rbegin); i--)
+#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rbigin)>{rend-1}; (i) >= (rbegin); i--)
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
 #define INRANGE1(x, r) (0 <= x && x < r)
@@ -52,6 +52,7 @@ using pll = pair<ll,ll>;
 
 constexpr int inf = 1073741823;
 constexpr ll infl = 1LL << 60;
+constexpr int mod = 1000000007;
 const string ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const string abc = "abcdefghijklmnopqrstuvwxyz";
 
@@ -75,11 +76,6 @@ auto mkvec(const int (&d)[n], const T& init = T{}) noexcept {
     if constexpr (idx < n) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
     else return init;
 }
-#define vi mkvec<int>
-#define vs mkvec<string>
-#define vb mkvec<bool>
-#define vpii mkvec<pii>
-#define vpll mkvec<pll>
 
 /***************************************
  pairとvectorを簡単に出力できるようにした
@@ -195,9 +191,44 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
     return minValue;
 }
 
+constexpr double PI=3.141592653589;
 
 int main() {
-    
+    inputi(N);
+
+    auto P = mkvec<ll>({N,2});
+    rep(i,N) rep(j,2) cin>>P[i][j];
+
+    auto angle = mkvec<double>({N, N - 1});
+    vector<double> ve({1.0, 0.0});
+    rep(s,N) {
+        int i = 0;
+        rep(e,N) {
+            if (s == e) continue;
+            vector<double> v({(double)(P[e][0] - P[s][0]), (double)(P[e][1] - P[s][1])});
+            if (v[1] >= 0) angle[s][i] = acos((double)(inner_product(all(v), ve.begin(), 0.0) / hypot(v[0], v[1]))) * 180.0 / PI;
+            else angle[s][i] = 360.0 - (acos((double)(inner_product(all(v), ve.begin(), 0.0) / hypot(v[0], v[1]))) * 180.0 / PI);
+            i++;
+        }
+        sort(all(angle[s]));
+    }
+
+    double ans = 0.0;
+    rep(p,N) {
+        int left = 0, right = 1;
+        while (right < N - 1) {
+            double ang = angle[p][right] - angle[p][left];
+            if (ang <= 180) {
+                chmax(ans, ang);
+                right++;
+            } else {
+                chmax(ans, 360.0 - ang);
+                left++;
+            }
+        }
+    }
+
+    printf("%.10f\n", ans);
 
     return 0;
 }

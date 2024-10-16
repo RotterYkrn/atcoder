@@ -15,6 +15,10 @@ using ll = long long;
 using ull = unsigned long long;
 using pii = pair<int,int>;
 using pll = pair<ll,ll>;
+using vi = vector<int>;
+using vll = vector<ll>;
+using vpii = vector<pii>;
+using vpll = vector<pll>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)

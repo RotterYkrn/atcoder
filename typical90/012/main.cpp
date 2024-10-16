@@ -16,6 +16,9 @@ using ll = long long;
 using ull = unsigned long long;
 using pii = pair<int,int>;
 using pll = pair<ll,ll>;
+using vi = vector<int>;
+using vll = vector<ll>;
+using vpii = vector<pii>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
@@ -217,35 +220,77 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
     return minValue;
 }
 
-bool rec(cint r, cint c, cint re, cint ce, cauto &grid, auto &visit) {
-    if (visit[r][c] || !grid[r][c]) return false;
-    visit[r][c] = 1;
-    rep(i,4) {
-        int nr = r + dx[i], nc = c + dy[i];
-        if (rec(nr, nc, re, ce, grid, visit)) return true;
+// bool rec(cint r, cint c, cint re, cint ce, cauto &grid, auto &visit) noexcept {
+//     if (r == re && c == ce) return true;
+//     if (!inRange(r, H) || !inRange(c, W) || visit[r][c] || !grid[r][c] ) return false;
+//     visit[r][c] = 1;
+//     rep(i,4) {
+//         int nr = r + dx[i], nc = c + dy[i];
+//         if (rec(nr, nc, re, ce, grid, visit)) return true;
+//     }
+//     return false;
+// }
+
+struct UnionFind {
+    vector<vpii> par; // par[i]:iの親の番号　(例) par[3] = 2 : 3の親が2
+    vector<vi> rank;
+    int group;
+    
+    UnionFind(const int N, const int M) : par(N, vpii(M)), rank(N, vi(M)), group(N * M) { //最初は全てが根であるとして初期化
+        for(int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                par[i][j] = {i, j};
+                rank[i][j] = 0;
+            }
+        }
     }
-    return false;
-}
+    
+    pii root(const pii x) { // データxが属する木の根を再帰で得る：root(x) = {xの木の根}
+        if (par[x.first][x.second] == x) return x;
+        return par[x.first][x.second] = root(par[x.first][x.second]);
+    }
+    
+    void unite(const pii x, const pii y) { // xとyの木を併合
+        pii rx = root(x); //xの根をrx
+        pii ry = root(y); //yの根をry
+        if (rx == ry) return; //xとyの根が同じ(=同じ木にある)時はそのまま
+
+        if (rank[rx.first][rx.second] < rank[ry.first][ry.second]){
+            par[rx.first][rx.second] = ry; //xとyの根が同じでない(=同じ木にない)時：xの根rxをyの根ryにつける
+        } else {
+            par[ry.first][ry.second] = rx;
+            if (rank[rx.first][rx.second] == rank[ry.first][ry.second]) rank[rx.first][rx.second]++;
+        }
+        group--;
+    }
+    
+    bool same(const pii x, const pii y) { // 2つのデータx, yが属する木が同じならtrueを返す
+        return root(x) == root(y);
+    }
+};
+
 
 int main() {
     inputi(H,W);
     auto grid = mkvec<int>({H,W});
+    UnionFind uf(H, W);
 
     inputi(Q);
     rep(Q) {
         inputi(q);
         if (q == 1) {
-            inputi(r,c);
-            grid[r - 1][c - 1] = 1;
+            inputi(r,c); r--; c--;
+            grid[r][c] = 1;
+            rep(i, 4) {
+                auto nr = r + dx[i], nc = c + dy[i];
+                if (inRange(nr, H) && inRange(nc, W) && grid[nr][nc]) {
+                    uf.unite({r, c}, {nr, nc});
+                }
+            }
         } else {
             inputi(rs,cs,re,ce);
             rs--; cs--; re--; ce--;
-            bool ans = false;
-            auto visit = mkvec<int>({H,W});
-            if (grid[rs][cs] && grid[re][ce]) {
-                ans = rec(rs, cs, re, ce, grid, visit);
-            }
-            YesNo(ans);
+            YesNo(grid[rs][cs] && grid[re][ce] && uf.same({rs, cs}, {re, ce}));
         }
     }
 

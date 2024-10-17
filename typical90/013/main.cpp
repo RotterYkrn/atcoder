@@ -245,20 +245,19 @@ int main() {
         }
     }
 
-    rep(k,N) {
-        auto costk = mkvec<ll>(N, infl);
-        que.push({0, k});
-        while (!que.empty()) {
-            auto [c, v] = que.top();
-            que.pop();
-            if (chmin(costk[v], c)) {
-                for (auto e: graph[v]) {
-                    que.push({c + e.second, e.first});
-                }
+    auto costN = mkvec<ll>(N, infl);
+    que.push({0, N - 1});
+    while (!que.empty()) {
+        auto [c, v] = que.top();
+        que.pop();
+        if (chmin(costN[v], c)) {
+            for (auto e: graph[v]) {
+                que.push({c + e.second, e.first});
             }
         }
-        print(cost1[k] + costk[N - 1]);
     }
+
+    rep(k, N) print(cost1[k] + costN[k]);
 
     return 0;
 }

@@ -37,7 +37,7 @@ using vpll = vector<pll>;
 // is in [l,r)
 #define INRANGE1(x, r) (0 <= x && x < r)
 #define INRANGE2(x, l, r) (l <= x && x < r)
-#define inRange(...) OVERLOAD_MACRO(__VA_ARGS__, INRANGE2, INRANGE1)(__VA_ARGS__)
+#define ir(...) OVERLOAD_MACRO(__VA_ARGS__, INRANGE2, INRANGE1)(__VA_ARGS__)
 
 #define pb push_back
 #define mp make_pair

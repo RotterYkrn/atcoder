@@ -1,3 +1,7 @@
+#ifdef __TEMPLATE__
+#pragma region template
+#endif
+
 #include <bits/stdc++.h>
 using namespace std;
 #if __has_include(<atcoder/all>)
@@ -218,6 +222,10 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
     }
     return minValue;
 }
+
+#ifdef __TEMPLATE__
+#pragma endregion template
+#endif
 
 
 int main() {

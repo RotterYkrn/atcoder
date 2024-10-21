@@ -13,3 +13,5 @@ alias db="g++-12 -std=gnu++20 -O2 -Wall -Wextra \
 -fconstexpr-ops-limit=2147483647 \
 -g -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -fstack-protector \
 -fsanitize=address -fsanitize=undefined -fno-sanitize-recover"
+
+alias cpt="cp ~/atcoder/tmp/main.cpp ./"

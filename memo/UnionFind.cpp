@@ -33,14 +33,12 @@ struct UnionFind {
     }
     
     bool same(const int x, const int y) { // 2つのデータx, yが属する木が同じならtrueを返す
-        int rx = root(x);
-        int ry = root(y);
-        return rx == ry;
+        return root(x) == root(y);
     }
 };
 
 /*****************
-  1次元バージョン
+  2次元バージョン
 ******************/
 struct UnionFind {
     vector<vector<pair<int, int>>> par; // par[i][j]:(i,j)の親の番号　(例) par[3][4] = {2,5} : (3,4)の親が(2,5)

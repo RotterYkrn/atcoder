@@ -82,5 +82,33 @@
 			"};"
 		],
 		"description": "2次元のUnionFind"
+	},
+	"Combination": {
+		"prefix": "com",
+		"body": [
+			"struct Conbination {",
+			"\tvector<long long> fac, finv;",
+			"\tconst int MOD = modint${1|1000000007,998244353|}::mod();",
+			"\t",
+			"\tConbination(int N) : fac(N), finv(N) {",
+			"\t\tvector<long long> inv(N);",
+			"\t\tfac[0] = fac[1] = 1;",
+			"\t\tfinv[0] = finv[1] = 1;",
+			"\t\tinv[1] = 1;",
+			"\t\tfor (int i = 2; i < N; i++){",
+			"\t\t\tfac[i] = fac[i - 1] * i % MOD;",
+			"\t\t\tinv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD;",
+			"\t\t\tfinv[i] = finv[i - 1] * inv[i] % MOD;",
+			"\t\t}",
+			"\t}",
+			"\t",
+			"\tinline long long calc(const int n, const int k) const noexcept {",
+			"\t\tif (n < k) return 0;",
+			"\t\tif (n < 0 || k < 0) return 0;",
+			"\t\treturn fac[n] * (finv[k] * finv[n - k] % MOD) % MOD;",
+			"\t}",
+			"};"
+		],
+		"description": "逆元を使用したnCkの計算"
 	}
 }

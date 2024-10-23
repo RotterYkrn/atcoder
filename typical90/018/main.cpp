@@ -1,3 +1,7 @@
+#ifdef __TEMPLATE__
+#pragma region template
+#endif
+
 #include <bits/stdc++.h>
 using namespace std;
 #if __has_include(<atcoder/all>)
@@ -9,26 +13,31 @@ using namespace atcoder;
 #pragma GCC target("avx")
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")
-struct Init { Init() { ios::sync_with_stdio(0); cin.tie(0); } }init;
+// struct Init { Init() { ios::sync_with_stdio(0); cin.tie(0); } }init;
 
 using ll = long long;
 using ull = unsigned long long;
 using pii = pair<int,int>;
 using pll = pair<ll,ll>;
+using vi = vector<int>;
+using vll = vector<ll>;
+using vpii = vector<pii>;
+using vpll = vector<pll>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
+#define REP0(end) for (auto _ = decay_t<decltype(end)>{}; (_) != (end); ++(_))
 #define REP1(i, end) for (auto i = decay_t<decltype(end)>{}; (i) != (end); ++(i))
-#define REP2(i, begin, end) for (auto i = (begin); (i) != (end); ++(i))
-#define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1)(__VA_ARGS__)
-// loop [rend,rbegin)
+#define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
+#define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1, REP0)(__VA_ARGS__)
+// reveres loop [rend,rbegin)
 #define RREP1(i, rbegin) for (auto i = (rbegin-1); i >= 0; i--)
-#define RREP2(i, rbigin, rend) for (auto i = (rend-1); (i) >= (rbegin); i--)
+#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rbigin)>{rend-1}; (i) >= (rbegin); i--)
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
 #define INRANGE1(x, r) (0 <= x && x < r)
 #define INRANGE2(x, l, r) (l <= x && x < r)
-#define inRange(...) OVERLOAD_MACRO(__VA_ARGS__, INRANGE2, INRANGE1)(__VA_ARGS__)
+#define ir(...) OVERLOAD_MACRO(__VA_ARGS__, INRANGE2, INRANGE1)(__VA_ARGS__)
 
 #define pb push_back
 #define mp make_pair
@@ -72,14 +81,9 @@ inline auto mkvec(const int d, const T& init = T{}) noexcept {
 }
 template<class T, size_t n, size_t idx = 0>
 auto mkvec(const int (&d)[n], const T& init = T{}) noexcept {
-    if constexpr (idx < n) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
-    else return init;
+    if constexpr (idx < n - 1) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
+    else return mkvec<T>(d[idx], init);
 }
-#define vi mkvec<int>
-#define vs mkvec<string>
-#define vb mkvec<bool>
-#define vpii mkvec<pii>
-#define vpll mkvec<pll>
 
 /***************************************
  pairとvectorを簡単に出力できるようにした
@@ -97,7 +101,7 @@ ostream &operator<<(ostream &os, const vector<T> v) {
         }
     } else {
         for (int i = 0; i < (int)v.size(); i++) {
-            os << v[i] << (i+1!=(int)v.size() ? spa : "");
+            os << v[i] << (i+1!=(int)v.size() ? spa : "\n");
         }
     }
     return os;
@@ -123,7 +127,30 @@ void input_cin(First& first, Rest&... rest) {
     input_cin(rest...); // recursive call using pack expansion syntax
 }
 #define inputi(...) int __VA_ARGS__; input_cin(__VA_ARGS__);
+#define inputll(...) ll __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputs(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
+template <class T>
+inline auto inputv(const int d) {
+    vector<T> vec(d);
+    for (int i = 0; i < d; i++) {
+        cin >> vec[i];
+    }
+    return vec;
+}
+template<class T, size_t n, size_t idx = 0>
+auto inputv(const int (&d)[n]) noexcept {
+    if constexpr (idx < n - 1) {
+        int d_make[n - idx];
+        copy(begin(d) + idx, end(d), begin(d_make));
+        auto vec = mkvec<T>(d_make);
+        for (int i = 0; i < (int)vec.size(); i++) {
+            vec[i] = inputv<T, n, idx + 1>(d);
+        }
+        return vec;
+    } else {
+        return inputv<T>(d[idx]);
+    }
+}
 
 /*************************
  Pythonのprintみたいなやつ
@@ -195,9 +222,28 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
     return minValue;
 }
 
+#ifdef __TEMPLATE__
+#pragma endregion template
+#endif
+
+double hypot(vector<double> v) {
+    double sum = 0.0;
+    for (const auto d: v) {
+        sum += d * d;
+    }
+    return sqrt(sum);
+}
 
 int main() {
-    
+    inputll(T,L,X,Y);
+    inputi(Q);
+    double r = (double)L / 2.0, th = 2.0 * M_PI / (double)T;
+    rep(Q) {
+        inputll(E);
+        vector<double> p{0.0, r * sin(-th * (double)E), r * -cos(th * (double)E) + r};
+        double angle = atan(p[2] / hypot(X, abs((double)Y - p[1]))) * 180.0 / M_PI;
+        printf("%.10f\n", angle);
+    }
 
     return 0;
 }

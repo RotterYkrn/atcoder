@@ -1,3 +1,7 @@
+#ifdef __TEMPLATE__
+#pragma region template
+#endif
+
 #include <bits/stdc++.h>
 using namespace std;
 #if __has_include(<atcoder/all>)
@@ -15,20 +19,25 @@ using ll = long long;
 using ull = unsigned long long;
 using pii = pair<int,int>;
 using pll = pair<ll,ll>;
+using vi = vector<int>;
+using vll = vector<ll>;
+using vpii = vector<pii>;
+using vpll = vector<pll>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
+#define REP0(end) for (auto _ = decay_t<decltype(end)>{}; (_) != (end); ++(_))
 #define REP1(i, end) for (auto i = decay_t<decltype(end)>{}; (i) != (end); ++(i))
-#define REP2(i, begin, end) for (auto i = (begin); (i) != (end); ++(i))
-#define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1)(__VA_ARGS__)
-// loop [rend,rbegin)
+#define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
+#define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1, REP0)(__VA_ARGS__)
+// reveres loop [rend,rbegin)
 #define RREP1(i, rbegin) for (auto i = (rbegin-1); i >= 0; i--)
-#define RREP2(i, rbigin, rend) for (auto i = (rend-1); (i) >= (rbegin); i--)
+#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rbigin)>{rend-1}; (i) >= (rbegin); i--)
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
 #define INRANGE1(x, r) (0 <= x && x < r)
 #define INRANGE2(x, l, r) (l <= x && x < r)
-#define inRange(...) OVERLOAD_MACRO(__VA_ARGS__, INRANGE2, INRANGE1)(__VA_ARGS__)
+#define ir(...) OVERLOAD_MACRO(__VA_ARGS__, INRANGE2, INRANGE1)(__VA_ARGS__)
 
 #define pb push_back
 #define mp make_pair
@@ -72,14 +81,9 @@ inline auto mkvec(const int d, const T& init = T{}) noexcept {
 }
 template<class T, size_t n, size_t idx = 0>
 auto mkvec(const int (&d)[n], const T& init = T{}) noexcept {
-    if constexpr (idx < n) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
-    else return init;
+    if constexpr (idx < n - 1) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
+    else return mkvec<T>(d[idx], init);
 }
-#define vi mkvec<int>
-#define vs mkvec<string>
-#define vb mkvec<bool>
-#define vpii mkvec<pii>
-#define vpll mkvec<pll>
 
 /***************************************
  pairとvectorを簡単に出力できるようにした
@@ -123,7 +127,30 @@ void input_cin(First& first, Rest&... rest) {
     input_cin(rest...); // recursive call using pack expansion syntax
 }
 #define inputi(...) int __VA_ARGS__; input_cin(__VA_ARGS__);
+#define inputll(...) ll __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputs(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
+template <class T>
+inline auto inputv(const int d) {
+    vector<T> vec(d);
+    for (int i = 0; i < d; i++) {
+        cin >> vec[i];
+    }
+    return vec;
+}
+template<class T, size_t n, size_t idx = 0>
+auto inputv(const int (&d)[n]) noexcept {
+    if constexpr (idx < n - 1) {
+        int d_make[n - idx];
+        copy(begin(d) + idx, end(d), begin(d_make));
+        auto vec = mkvec<T>(d_make);
+        for (int i = 0; i < (int)vec.size(); i++) {
+            vec[i] = inputv<T, n, idx + 1>(d);
+        }
+        return vec;
+    } else {
+        return inputv<T>(d[idx]);
+    }
+}
 
 /*************************
  Pythonのprintみたいなやつ
@@ -195,9 +222,98 @@ T4 min(const T1<T2<T4, T5>, T3> v) noexcept {
     return minValue;
 }
 
+#ifdef __TEMPLATE__
+#pragma endregion template
+#endif
+
+template<class T, const T& (* const op)(const T &, const T &) = max, const T e = T()>
+struct SegTree {
+    vector<T> tree, lazy;
+    size_t n;
+    const T LAZY_DEF = numeric_limits<T>::max();
+
+    SegTree(size_t n) noexcept {
+        size_t tree_size = 2;
+        while (tree_size < n) {
+            tree_size *= 2;
+        }
+        tree = vector<T>(tree_size * 2, e);
+        lazy = vector<T>(tree_size * 2, LAZY_DEF);
+        n = tree_size;
+    }
+
+    SegTree(vector<T> v) noexcept : SegTree(v.size()) {
+        copy(v.begin(), v.end(), tree.begin() + n - 1);
+        for (size_t i = n - 2; i >= 0; i--) {
+            tree[i] = op(tree[i * 2 + 1], tree[i * 2 + 2]);
+        }
+    }
+
+    inline void deleyed_evaluation(size_t node) {
+        if (lazy[node] == LAZY_DEF) {
+            return;
+        }
+        if (node < n - 1) {
+            lazy[node * 2 + 1] = lazy[node];
+            lazy[node * 2 + 2] = lazy[node];
+        }
+        tree[node] = lazy[node];
+        lazy[node] = LAZY_DEF;
+    }
+
+    inline void set(const size_t p, const T x) noexcept {
+        size_t node = n + p - 1;
+        tree[node] = x;
+        while (node > 0) {
+            node = (node - 1) / 2;
+            tree[node] = op(tree[node * 2 + 1], tree[node * 2 + 2]);
+        }
+    }
+
+    void set(const size_t sl, const size_t sr, const T x, const size_t node, const size_t nl, const size_t nr) noexcept {
+        deleyed_evaluation(node);
+        if (sl <= nl && nr <= sr) {
+            lazy[node] = x;
+        } else if (sl < nr && nl < sr) {
+            set(sl, sr, x, node, nl, (nl + nr) / 2);
+            set(sl, sr, x, node, (nl + nr) / 2, nr);
+        }
+    }
+    inline void set(const size_t l, const size_t r, const T x) noexcept {
+        set(l, r, x, 0, 0, n);
+    }
+
+    T query_sub(const size_t ql, const size_t qr, const size_t node, const size_t nl, const size_t nr) noexcept {
+        deleyed_evaluation(node);
+        if (nr <= ql || qr <= nr) {
+            return e;
+        } else if (ql <= nl && nr <= qr) {
+            return tree[node];
+        } else {
+            T vl = query_sub(ql, qr, node * 2 + 1, nl, (nl + nr) / 2);
+            T vr = query_sub(ql, qr, node * 2 + 2, (nl + nr) / 2, nr);
+            return tree[node] = op(vl, vr);
+        }
+    }
+    // [l, r)
+    inline T query(const size_t l, const size_t r) noexcept {
+        return query_sub(l, r, 0, 0, n);
+    }
+
+    inline T query_all() const noexcept {
+        return tree[0];
+    }
+};
 
 int main() {
-    
+    inputi(W,N);
+    SegTree<int> seg(W);
+    rep(N) {
+        inputi(L,R);
+        seg.set(L - 1, R, seg.query(L - 1, R) + 1);
+        print(seg.query_all());
+    }
+
 
     return 0;
 }

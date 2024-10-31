@@ -233,7 +233,7 @@ int main() {
     auto day = mkvec<int>(0);
     rep(i, N) {
         inputs(S);
-        if (id.find(S) != id.end()) {
+        if (id.find(S) == id.end()) {
             day.pb(i + 1);
             id[S] = 1;
         }

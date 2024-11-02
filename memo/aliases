@@ -3,7 +3,7 @@ alias g+="g++-12 -std=gnu++20 -O2 -Wall -Wextra \
 -Wduplicated-cond -mtune=native -march=native \
 -fconstexpr-depth=2147483647 \
 -fconstexpr-loop-limit=2147483647 \
--fconstexpr-ops-limit=2147483647"
+-fconstexpr-ops-limit=2147483647 main.cpp"
 
 alias db="g++-12 -std=gnu++20 -O2 -Wall -Wextra \
 -Wfloat-equal -Wconversion -Wlogical-op -Wshift-overflow=2 \
@@ -12,6 +12,17 @@ alias db="g++-12 -std=gnu++20 -O2 -Wall -Wextra \
 -fconstexpr-loop-limit=2147483647 \
 -fconstexpr-ops-limit=2147483647 \
 -g -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -fstack-protector \
--fsanitize=address -fsanitize=undefined -fno-sanitize-recover"
+-fsanitize=address -fsanitize=undefined -fno-sanitize-recover main.cpp"
 
 alias cpt="cp ~/atcoder/tmp/main.cpp ./"
+
+alias cptmp="cp ~/atcoder/tmp/main.cpp ~/.config/atcoder-cli-nodejs/cpp/"
+
+alias aclogin="acc login 1> /dev/null; oj login https://atcoder.jp 1> /dev/null"
+
+function acnew() {
+    aclogin
+    cd ~/atcoder/abc
+    acc new $1 >& /dev/null
+    cd $1
+}

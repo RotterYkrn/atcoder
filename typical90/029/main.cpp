@@ -261,17 +261,6 @@ struct SegTree {
         lazy[node] = LAZY_DEF;
     }
 
-    T update_all_sub(const size_t node) noexcept {
-        delayed_evaluation(node);
-        if (node < n - 1) {
-            tree[node] = op(update_all_sub(node * 2 + 1), update_all_sub(node * 2 + 2));
-        }
-        return tree[node];
-    }
-    inline void update_all() noexcept {
-        update_all_sub(0);
-    }
-
     inline void set(const size_t p, const T x) noexcept {
         size_t node = n + p - 1;
         tree[node] = x;

@@ -232,9 +232,9 @@ struct SegTree {
     size_t n;
     const T LAZY_DEF = numeric_limits<T>::max();
 
-    SegTree(size_t n) noexcept {
+    SegTree(const size_t N) noexcept {
         size_t tree_size = 2;
-        while (tree_size < n) {
+        while (tree_size < N) {
             tree_size *= 2;
         }
         tree = vector<T>(tree_size * 2, e);
@@ -242,14 +242,14 @@ struct SegTree {
         n = tree_size;
     }
 
-    SegTree(vector<T> v) noexcept : SegTree(v.size()) {
+    SegTree(const vector<T> v) noexcept : SegTree(v.size()) {
         copy(v.begin(), v.end(), tree.begin() + n - 1);
         for (size_t i = n - 2; i >= 0; i--) {
             tree[i] = op(tree[i * 2 + 1], tree[i * 2 + 2]);
         }
     }
 
-    inline void deleyed_evaluation(size_t node) {
+    inline void delayed_evaluation(size_t node) {
         if (lazy[node] == LAZY_DEF) {
             return;
         }
@@ -261,6 +261,17 @@ struct SegTree {
         lazy[node] = LAZY_DEF;
     }
 
+    T update_all_sub(const size_t node) noexcept {
+        delayed_evaluation(node);
+        if (node < n - 1) {
+            tree[node] = op(update_all_sub(node * 2 + 1), update_all_sub(node * 2 + 2));
+        }
+        return tree[node];
+    }
+    inline void update_all() noexcept {
+        update_all_sub(0);
+    }
+
     inline void set(const size_t p, const T x) noexcept {
         size_t node = n + p - 1;
         tree[node] = x;
@@ -270,29 +281,31 @@ struct SegTree {
         }
     }
 
-    void set(const size_t sl, const size_t sr, const T x, const size_t node, const size_t nl, const size_t nr) noexcept {
-        deleyed_evaluation(node);
+    void set(const size_t sl, const size_t sr, const T v, const size_t node, const size_t nl, const size_t nr) noexcept {
+        delayed_evaluation(node);
         if (sl <= nl && nr <= sr) {
-            lazy[node] = x;
+            lazy[node] = v;
+            delayed_evaluation(node);
         } else if (sl < nr && nl < sr) {
-            set(sl, sr, x, node, nl, (nl + nr) / 2);
-            set(sl, sr, x, node, (nl + nr) / 2, nr);
+            set(sl, sr, v, node * 2 + 1, nl, (nl + nr) / 2);
+            set(sl, sr, v, node * 2 + 2, (nl + nr) / 2, nr);
+            tree[node] = op(tree[node * 2 + 1], tree[node * 2 + 2]);
         }
     }
-    inline void set(const size_t l, const size_t r, const T x) noexcept {
-        set(l, r, x, 0, 0, n);
+    inline void set(const size_t l, const size_t r, const T value) noexcept {
+        set(l, r, value, 0, 0, n);
     }
 
     T query_sub(const size_t ql, const size_t qr, const size_t node, const size_t nl, const size_t nr) noexcept {
-        deleyed_evaluation(node);
-        if (nr <= ql || qr <= nr) {
+        delayed_evaluation(node);
+        if (nr <= ql || qr <= nl) {
             return e;
         } else if (ql <= nl && nr <= qr) {
             return tree[node];
         } else {
             T vl = query_sub(ql, qr, node * 2 + 1, nl, (nl + nr) / 2);
             T vr = query_sub(ql, qr, node * 2 + 2, (nl + nr) / 2, nr);
-            return tree[node] = op(vl, vr);
+            return op(vl, vr);
         }
     }
     // [l, r)
@@ -300,7 +313,7 @@ struct SegTree {
         return query_sub(l, r, 0, 0, n);
     }
 
-    inline T query_all() const noexcept {
+    inline T query_all() noexcept {
         return tree[0];
     }
 };
@@ -310,10 +323,10 @@ int main() {
     SegTree<int> seg(W);
     rep(N) {
         inputi(L,R);
-        seg.set(L - 1, R, seg.query(L - 1, R) + 1);
-        print(seg.query_all());
+        int h = seg.query(L - 1, R) + 1;
+        print(h);
+        seg.set(L - 1, R, h);
     }
-
 
     return 0;
 }

@@ -1,0 +1,64 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "pull",
+            "type": "shell",
+            "command": "git pull",
+            "presentation": {
+              "reveal": "never",
+              "revealProblems": "onProblem",
+              "echo": false,
+              "showReuseMessage": false,
+              "panel": "shared",
+              "close": true
+            }
+        },
+        {
+            "label": "add",
+            "type": "shell",
+            "command": "git add -A",
+            "presentation": {
+              "reveal": "never",
+              "revealProblems": "onProblem",
+              "echo": false,
+              "showReuseMessage": false,
+              "panel": "shared",
+              "close": true
+            }
+        },
+        {
+            "label": "commit",
+            "type": "shell",
+            "command": "git diff --cached --quiet || git commit -m \"task\"",
+            "presentation": {
+              "reveal": "never",
+              "revealProblems": "onProblem",
+              "echo": false,
+              "showReuseMessage": false,
+              "panel": "shared",
+              "close": true
+            }
+        },
+        {
+            "label": "push",
+            "type": "shell",
+            "command": "git push origin master",
+            "dependsOrder": "sequence",
+            "dependsOn": ["pull", "add", "commit"],
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "presentation": {
+              "reveal": "never",
+              "revealProblems": "onProblem",
+              "echo": false,
+              "showReuseMessage": false,
+              "panel": "shared",
+              "close": true
+            }
+        }
+    ]
+}

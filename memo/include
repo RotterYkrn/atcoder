@@ -1,1 +1,1 @@
-export CPLUS_INCLUDE_PATH="/home/oonoyu/atcoder/ac-library:/opt/boost/bin:usr/include/eigen3"
+export CPLUS_INCLUDE_PATH="/home/rotterykrn/atcoder/ac-library:/opt/boost/bin:/usr/include/eigen3"

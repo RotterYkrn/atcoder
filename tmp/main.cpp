@@ -26,7 +26,7 @@ using vpll = vector<pll>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
-#define REP0(end)           for (auto _ = decay_t<decltype(end)>{};      (_) != (end); ++(_))
+#define REP0(end)           while(end--)
 #define REP1(i, end)        for (auto i = decay_t<decltype(end)>{};      (i) != (end); ++(i))
 #define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1, REP0)(__VA_ARGS__)

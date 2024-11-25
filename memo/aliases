@@ -23,6 +23,19 @@ alias aclogin="acc login 1> /dev/null; oj login https://atcoder.jp 1> /dev/null"
 function acnew() {
     aclogin
     cd ~/atcoder/abc
-    acc new $1 >& /dev/null
-    cd $1
+
+    mod=$(($1 % 25))
+    start=0
+    if [ $mod -ne 0 ]; then start=$(($1 - $mod + 1))
+    else start=$(($1 - 24))
+    fi
+    end=$(($start + 24))
+
+    folder="abc$start~$end"
+    if [ ! -d "$folder" ]; then mkdir $folder
+    fi
+    cd $folder
+
+    acc new "abc$1" >& /dev/null
+    cd "abc$1"
 }

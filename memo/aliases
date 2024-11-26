@@ -39,3 +39,14 @@ function acnew() {
     acc new "abc$1" >& /dev/null
     cd "abc$1"
 }
+
+function abc() {
+    mod=$(($1 % 25))
+    start=0
+    if [ $mod -ne 0 ]; then start=$(($1 - $mod + 1))
+    else start=$(($1 - 24))
+    fi
+    end=$(($start + 24))
+
+    cd ~/atcoder/abc/abc$start~$end/abc$1
+}

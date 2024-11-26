@@ -26,13 +26,13 @@ using vpll = vector<pll>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
-#define REP0(end)           while(end--)
+#define REP0(end)           for (auto _ = decay_t<decltype(end)>{};      (_) != (end); ++(_))
 #define REP1(i, end)        for (auto i = decay_t<decltype(end)>{};      (i) != (end); ++(i))
 #define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1, REP0)(__VA_ARGS__)
 // reveres loop [rend,rbegin)
-#define RREP1(i, rbegin)       for (auto i = (rbegin-1);                          (i) >= 0;        --(i))
-#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rbigin)>{rend - 1}; (i) >= (rbegin); --(i))
+#define RREP1(i, rbegin)       for (auto i = (rbegin - 1);                        (i) >= 0;      --(i))
+#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rend)>{rbigin - 1}; (i) >= (rend); --(i))
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
 #define INRANGE1(x, r)    (0 <= x && x < r)
@@ -51,11 +51,11 @@ using vpll = vector<pll>;
 #define no  cout << "no" << el
 #define YES cout << "YES" << el
 #define NO  cout << "NO" << el
-#define YESNO(bool) if(bool) { cout<<"YES"<<el; } else { cout<<"NO"<<el; }
-#define yesno(bool) if(bool) { cout<<"yes"<<el; } else { cout<<"no"<<el; }
-#define YesNo(bool) if(bool) { cout<<"Yes"<<el; } else { cout<<"No"<<el; }
+#define YESNO(bool) if(bool) { cout << "YES" << el; } else { cout << "NO" << el; }
+#define YesNo(bool) if(bool) { cout << "Yes" << el; } else { cout << "No" << el; }
+#define yesno(bool) if(bool) { cout << "yes" << el; } else { cout << "no" << el; }
 #define eps (1e-10)
-#define Equals(a,b) (fabs((a) - (b)) < eps)
+#define Equals(a, b) (fabs((a) - (b)) < eps)
 #define isNum(s) all_of(all(s), [](char c){ return isdigit(c); })
 #define debug(x) cerr << #x << " = " << x << el
 
@@ -220,7 +220,16 @@ T min(const vector<vector<T>> v) noexcept {
 
 
 int main() {
-    
+    inputi(A,B);
+
+    int sub = abs(A - B);
+    if (sub == 0) {
+        print(1);
+    } else if (sub % 2 == 1) {
+        print(2);
+    } else {
+        print(3);
+    }
 
     return 0;
 }

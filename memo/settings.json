@@ -90,5 +90,23 @@
         "spanstream": "cpp",
         "stacktrace": "cpp"
     },
-    "C_Cpp.dimInactiveRegions": false
+    "C_Cpp.dimInactiveRegions": false,
+    "C_Cpp.default.includePath": [
+        "/home/rotterykrn/atcoder/ac-library"
+    ],
+    "cSpell.ignoreRegExpList": ["[０-９Ａ-Ｚａ-ｚぁ-んァ-ヶ亜-熙纊-黑]+"],
+    "cSpell.words": [
+        "atcoder",
+        "chmax",
+        "chmin",
+        "finv",
+        "inputi",
+        "inputll",
+        "inputv",
+        "modint",
+        "noexcept",
+        "RREP",
+        "vpii",
+        "vpll"
+    ]
 }

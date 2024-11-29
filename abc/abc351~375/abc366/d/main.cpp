@@ -267,27 +267,3 @@ int main() {
 
     return 0;
 }
-
-template<class T>
-struct CumulativeSumArray2 {
-    vector<vector<T>> arr;
-
-    explicit CumulativeSumArray2(const auto &origin) : arr(origin.size() + 1,
-                                                          vector(origin[0].size() + 1, static_cast<T>(0))) {
-        for (size_t i = 0; i < origin.size(); i++) {
-            for (size_t j = 0; j < origin[0].size(); j++) {
-                arr[i + 1][j + 1] = origin[i][j];
-                arr[i + 1][j + 1] += arr[i][j + 1] + arr[i + 1][j];
-                arr[i + 1][j + 1] -= arr[i][j];
-            }
-        }
-    }
-
-    T query(const int (&l)[2], const int (&r)[2]) const noexcept {
-        T ans = 0;
-        ans = arr[r[0]][r[1]];
-        ans -= arr[l[0]][r[1]] + arr[r[0]][l[1]];
-        ans += arr[l[0]][l[1]];
-        return ans;
-    }
-};

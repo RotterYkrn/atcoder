@@ -4,7 +4,7 @@ struct SegTree {
     size_t n;
     const T LAZY_DEF = numeric_limits<T>::max();
 
-    SegTree(const size_t N) noexcept {
+    explicit SegTree(const size_t N) noexcept {
         size_t tree_size = 2;
         while (tree_size < N) {
             tree_size *= 2;
@@ -14,7 +14,7 @@ struct SegTree {
         n = tree_size;
     }
 
-    SegTree(const vector<T> v) noexcept : SegTree(v.size()) {
+    explicit SegTree(const vector<T> v) noexcept : SegTree(v.size()) {
         copy(v.begin(), v.end(), tree.begin() + n - 1);
         for (size_t i = n - 2; i >= 0; i--) {
             tree[i] = op(tree[i * 2 + 1], tree[i * 2 + 2]);

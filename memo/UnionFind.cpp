@@ -6,7 +6,7 @@ struct UnionFind {
     vector<int> rank;
     int group;
     
-    UnionFind(const int N) : par(N), rank(N), group(N) { //最初は全てが根であるとして初期化
+    explicit UnionFind(const int N) : par(N), rank(N), group(N) { //最初は全てが根であるとして初期化
         for(int i = 0; i < N; i++) {
             par[i] = i;
             rank[i] = 0;

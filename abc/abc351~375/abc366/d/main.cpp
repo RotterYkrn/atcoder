@@ -26,13 +26,13 @@ using vpll = vector<pll>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
-#define REP0(end)           while(end--)
+#define REP0(end)           for (auto _ = decay_t<decltype(end)>{};      (_) != (end); ++(_))
 #define REP1(i, end)        for (auto i = decay_t<decltype(end)>{};      (i) != (end); ++(i))
 #define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1, REP0)(__VA_ARGS__)
 // reveres loop [rend,rbegin)
-#define RREP1(i, rbegin)       for (auto i = (rbegin-1);                          (i) >= 0;        --(i))
-#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rbigin)>{rend - 1}; (i) >= (rbegin); --(i))
+#define RREP1(i, rbegin)       for (auto i = (rbegin - 1);                        (i) >= 0;      --(i))
+#define RREP2(i, rbegin, rend) for (auto i = decay_t<decltype(rend)>{rbegin - 1}; (i) >= (rend); --(i))
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
 #define INRANGE1(x, r)    (0 <= x && x < r)
@@ -51,11 +51,11 @@ using vpll = vector<pll>;
 #define no  cout << "no" << el
 #define YES cout << "YES" << el
 #define NO  cout << "NO" << el
-#define YESNO(bool) if(bool) { cout<<"YES"<<el; } else { cout<<"NO"<<el; }
-#define yesno(bool) if(bool) { cout<<"yes"<<el; } else { cout<<"no"<<el; }
-#define YesNo(bool) if(bool) { cout<<"Yes"<<el; } else { cout<<"No"<<el; }
+#define YESNO(bool) if(bool) { cout << "YES" << el; } else { cout << "NO" << el; }
+#define YesNo(bool) if(bool) { cout << "Yes" << el; } else { cout << "No" << el; }
+#define yesno(bool) if(bool) { cout << "yes" << el; } else { cout << "no" << el; }
 #define eps (1e-10)
-#define Equals(a,b) (fabs((a) - (b)) < eps)
+#define Equals(a, b) (fabs((a) - (b)) < eps)
 #define isNum(s) all_of(all(s), [](char c){ return isdigit(c); })
 #define debug(x) cerr << #x << " = " << x << el
 
@@ -218,9 +218,76 @@ T min(const vector<vector<T>> v) noexcept {
 #pragma endregion template
 #endif
 
+template<class T>
+struct CumulativeSumArray3 {
+    vector<vector<vector<T>>> arr;
+
+    explicit CumulativeSumArray3(const auto &origin) : arr(origin.size() + 1,
+                                                          vector(origin[0].size() + 1,
+                                                          vector(origin[0][0].size() + 1, static_cast<T>(0)))) {
+        for (size_t i = 0; i < origin.size(); i++) {
+            for (size_t j = 0; j < origin[0].size(); j++) {
+                for (size_t k = 0; k < origin[0][0].size(); k++) {
+                    arr[i + 1][j + 1][k + 1] = origin[i][j][k];
+
+                    arr[i + 1][j + 1][k + 1] += arr[i][j + 1][k + 1]
+                                              + arr[i + 1][j][k + 1]
+                                              + arr[i + 1][j + 1][k];
+
+                    arr[i + 1][j + 1][k + 1] -= arr[i][j][k + 1]
+                                              + arr[i + 1][j][k]
+                                              + arr[i][j + 1][k];
+                    
+                    arr[i + 1][j + 1][k + 1] += arr[i][j][k];
+                }
+            }
+        }
+    }
+
+    T query(const int (&l)[3], const int (&r)[3]) const noexcept {
+        T ans = 0;
+        ans = arr[r[0]][r[1]][r[2]];
+        ans -= arr[l[0]][r[1]][r[2]] + arr[r[0]][l[1]][r[2]] + arr[r[0]][r[1]][l[2]];
+        ans += arr[l[0]][l[1]][r[2]] + arr[r[0]][l[1]][l[2]] + arr[l[0]][r[1]][l[2]];
+        ans -= arr[l[0]][l[1]][l[2]];
+        return ans;
+    }
+};
 
 int main() {
-    
+    inputi(N);
+    auto A = inputv<int>({N,N,N});
+    CumulativeSumArray3<ll> s(A);
+
+    inputi(Q);
+    rep(Q) {
+        inputi(Lx,Rx,Ly,Ry,Lz,Rz); Lx--; Ly--; Lz--;
+        print(s.query({Lx,Ly,Lz}, {Rx,Ry,Rz}));
+    }
 
     return 0;
 }
+
+template<class T>
+struct CumulativeSumArray2 {
+    vector<vector<T>> arr;
+
+    explicit CumulativeSumArray2(const auto &origin) : arr(origin.size() + 1,
+                                                          vector(origin[0].size() + 1, static_cast<T>(0))) {
+        for (size_t i = 0; i < origin.size(); i++) {
+            for (size_t j = 0; j < origin[0].size(); j++) {
+                arr[i + 1][j + 1] = origin[i][j];
+                arr[i + 1][j + 1] += arr[i][j + 1] + arr[i + 1][j];
+                arr[i + 1][j + 1] -= arr[i][j];
+            }
+        }
+    }
+
+    T query(const int (&l)[2], const int (&r)[2]) const noexcept {
+        T ans = 0;
+        ans = arr[r[0]][r[1]];
+        ans -= arr[l[0]][r[1]] + arr[r[0]][l[1]];
+        ans += arr[l[0]][l[1]];
+        return ans;
+    }
+};

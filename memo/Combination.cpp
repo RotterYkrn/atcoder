@@ -1,8 +1,8 @@
-struct Conbination {
+struct Combination {
     vector<long long> fac, finv;
     const int MOD = modint1000000007::mod();
 
-    Conbination(int N) : fac(N), finv(N) {
+    explicit Combination(int N) : fac(N), finv(N) {
         vector<long long> inv(N);
         fac[0] = fac[1] = 1;
         finv[0] = finv[1] = 1;

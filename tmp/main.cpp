@@ -32,7 +32,7 @@ using vpll = vector<pll>;
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1, REP0)(__VA_ARGS__)
 // reveres loop [rend,rbegin)
 #define RREP1(i, rbegin)       for (auto i = (rbegin - 1);                        (i) >= 0;      --(i))
-#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rend)>{rbigin - 1}; (i) >= (rend); --(i))
+#define RREP2(i, rbegin, rend) for (auto i = decay_t<decltype(rend)>{rbegin - 1}; (i) >= (rend); --(i))
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
 #define INRANGE1(x, r)    (0 <= x && x < r)

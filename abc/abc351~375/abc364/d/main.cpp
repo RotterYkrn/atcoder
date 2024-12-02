@@ -226,8 +226,43 @@ int main() {
 
     rep(Q) {
         inputll(b); inputi(k);
-        int left = distance(A.begin(), distance(all(A), b));
+        auto left = (int)distance(A.begin(), lower_bound(all(A), b));
+        auto idx = mkvec<int>(2);
+        idx[0] = left;
+        idx[1] = left + 1;
+        ll d = 0, d_rev = -1;
+        int i = -1, direction = 0;
+        while (i < k) {
+            if (idx[0] >= 0 && idx[1] < N) {
+                ll sub = abs(A[idx[direction]] - b);
+                if (sub > d_rev) {
+                    d = d_rev;
+                    d_rev = sub;
+                    idx[direction] += (direction == 0 ? -1 : 1);
+                    direction = 1 - direction;
+                } else {
+                    d = sub;
+                    idx[direction] += (direction == 0 ? -1 : 1);
+                }
+            } else {
+                if (idx[0] == N - 1) {
+                    d = abs(A[idx[0]] - b);
+                    idx[0]--;
+                    i = 1;
+                } else d = d_rev;
+                if (idx[0] < 0) direction = 1;
+                else if (idx[1] >= N) direction = 0;
+                i++;
+                break;
+            }
+            i++;
+        }
 
+        if (i < k) {
+            d = abs(A[idx[direction] + (direction == 0 ? -1 : 1) * (k - i)] - b);
+        }
+
+        print(d);
     }
 
     return 0;

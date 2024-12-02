@@ -26,13 +26,13 @@ using vpll = vector<pll>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
-#define REP0(end)           while(end--)
+#define REP0(end)           for (auto _ = decay_t<decltype(end)>{};      (_) != (end); ++(_))
 #define REP1(i, end)        for (auto i = decay_t<decltype(end)>{};      (i) != (end); ++(i))
 #define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1, REP0)(__VA_ARGS__)
 // reveres loop [rend,rbegin)
-#define RREP1(i, rbegin)       for (auto i = (rbegin-1);                          (i) >= 0;        --(i))
-#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rbigin)>{rend - 1}; (i) >= (rbegin); --(i))
+#define RREP1(i, rbegin)       for (auto i = (rbegin - 1);                        (i) >= 0;      --(i))
+#define RREP2(i, rbegin, rend) for (auto i = decay_t<decltype(rend)>{rbegin - 1}; (i) >= (rend); --(i))
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
 #define INRANGE1(x, r)    (0 <= x && x < r)
@@ -51,11 +51,11 @@ using vpll = vector<pll>;
 #define no  cout << "no" << el
 #define YES cout << "YES" << el
 #define NO  cout << "NO" << el
-#define YESNO(bool) if(bool) { cout<<"YES"<<el; } else { cout<<"NO"<<el; }
-#define yesno(bool) if(bool) { cout<<"yes"<<el; } else { cout<<"no"<<el; }
-#define YesNo(bool) if(bool) { cout<<"Yes"<<el; } else { cout<<"No"<<el; }
+#define YESNO(bool) if(bool) { cout << "YES" << el; } else { cout << "NO" << el; }
+#define YesNo(bool) if(bool) { cout << "Yes" << el; } else { cout << "No" << el; }
+#define yesno(bool) if(bool) { cout << "yes" << el; } else { cout << "no" << el; }
 #define eps (1e-10)
-#define Equals(a,b) (fabs((a) - (b)) < eps)
+#define Equals(a, b) (fabs((a) - (b)) < eps)
 #define isNum(s) all_of(all(s), [](char c){ return isdigit(c); })
 #define debug(x) cerr << #x << " = " << x << el
 
@@ -130,7 +130,7 @@ void input_cin(First& first, Rest&... rest) {
 #define inputll(...)    ll __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputs(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
 template <class T>
-inline auto inputv(const int d) {
+inline auto inputv(const auto d) {
     vector<T> vec(d);
     for (int i = 0; i < d; i++) {
         cin >> vec[i];
@@ -218,9 +218,49 @@ T min(const vector<vector<T>> v) noexcept {
 #pragma endregion template
 #endif
 
+template<class T>
+struct CumulativeSumArray1 {
+    vector<T> arr;
+    
+    explicit CumulativeSumArray1(const auto &origin) : arr(origin.size() + 1, static_cast<T>(0)) {
+        for (size_t i = 0; i < origin.size(); i++) {
+            arr[i + 1] = origin[i] + arr[i];
+        }
+    }
+    
+    T query(const auto l, const auto r) const noexcept {
+        return arr[r] - arr[l];
+    }
+};
 
 int main() {
-    
+    inputll(N);
+    inputll(M);
+    auto A = inputv<ll>(N);
+
+    ll sum = 0;
+    rep(i, N) sum += A[i];
+    if (sum <= M) {
+        print("infinite");
+        return 0;
+    }
+
+    sort(all(A));
+    CumulativeSumArray1<ll> cum(A);
+
+    ll left = 0, right = max(A);
+    while (right - left > 1) {
+        ll mid = (right + left) / 2;
+        auto it = upper_bound(all(A), mid);
+        auto d = distance(A.begin(), it);
+        ll m = cum.query(0, d) + mid * (N - d);
+        if (m <= M) {
+            left = mid;
+        } else {
+            right = mid;
+        }
+    }
+    print(left);
 
     return 0;
 }

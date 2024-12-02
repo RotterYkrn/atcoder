@@ -26,13 +26,13 @@ using vpll = vector<pll>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
-#define REP0(end)           while(end--)
+#define REP0(end)           for (auto _ = decay_t<decltype(end)>{};      (_) != (end); ++(_))
 #define REP1(i, end)        for (auto i = decay_t<decltype(end)>{};      (i) != (end); ++(i))
 #define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1, REP0)(__VA_ARGS__)
 // reveres loop [rend,rbegin)
-#define RREP1(i, rbegin)       for (auto i = (rbegin-1);                          (i) >= 0;        --(i))
-#define RREP2(i, rbigin, rend) for (auto i = decay_t<decltype(rbigin)>{rend - 1}; (i) >= (rbegin); --(i))
+#define RREP1(i, rbegin)       for (auto i = (rbegin - 1);                        (i) >= 0;      --(i))
+#define RREP2(i, rbegin, rend) for (auto i = decay_t<decltype(rend)>{rbegin - 1}; (i) >= (rend); --(i))
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
 #define INRANGE1(x, r)    (0 <= x && x < r)
@@ -51,11 +51,11 @@ using vpll = vector<pll>;
 #define no  cout << "no" << el
 #define YES cout << "YES" << el
 #define NO  cout << "NO" << el
-#define YESNO(bool) if(bool) { cout<<"YES"<<el; } else { cout<<"NO"<<el; }
-#define yesno(bool) if(bool) { cout<<"yes"<<el; } else { cout<<"no"<<el; }
-#define YesNo(bool) if(bool) { cout<<"Yes"<<el; } else { cout<<"No"<<el; }
+#define YESNO(bool) if(bool) { cout << "YES" << el; } else { cout << "NO" << el; }
+#define YesNo(bool) if(bool) { cout << "Yes" << el; } else { cout << "No" << el; }
+#define yesno(bool) if(bool) { cout << "yes" << el; } else { cout << "no" << el; }
 #define eps (1e-10)
-#define Equals(a,b) (fabs((a) - (b)) < eps)
+#define Equals(a, b) (fabs((a) - (b)) < eps)
 #define isNum(s) all_of(all(s), [](char c){ return isdigit(c); })
 #define debug(x) cerr << #x << " = " << x << el
 
@@ -76,11 +76,11 @@ constexpr int dx8[8] = {-1, 0, 1, 1, 1, 0,-1,-1};
  mkvec<type>(n or {n1,n2,...}[, init])
 ****************************************/
 template<class T>
-inline auto mkvec(const int d, const T& init = T{}) noexcept {
+inline auto mkvec(const auto d, const T& init = T{}) noexcept {
     return vector<T>(d, init);
 }
 template<class T, size_t n, size_t idx = 0>
-auto mkvec(const int (&d)[n], const T& init = T{}) noexcept {
+auto mkvec(const auto (&d)[n], const T& init = T{}) noexcept {
     if constexpr (idx < n - 1) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
     else return mkvec<T>(d[idx], init);
 }
@@ -130,7 +130,7 @@ void input_cin(First& first, Rest&... rest) {
 #define inputll(...)    ll __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputs(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
 template <class T>
-inline auto inputv(const int d) {
+inline auto inputv(const auto d) {
     vector<T> vec(d);
     for (int i = 0; i < d; i++) {
         cin >> vec[i];
@@ -138,7 +138,7 @@ inline auto inputv(const int d) {
     return vec;
 }
 template<class T, size_t n, size_t idx = 0>
-auto inputv(const int (&d)[n]) noexcept {
+auto inputv(const auto (&d)[n]) noexcept {
     if constexpr (idx < n - 1) {
         int d_make[n - idx];
         copy(begin(d) + idx, end(d), begin(d_make));
@@ -220,7 +220,24 @@ T min(const vector<vector<T>> v) noexcept {
 
 
 int main() {
-    
+    inputi(N);
+    auto S = inputv<string>(N);
+
+    bool sweet = false;
+    rep(i, N - 1) {
+        if (S[i] == "sweet") {
+            if (sweet) {
+                No;
+                return 0;
+            } else {
+                sweet = true;
+            }
+        } else {
+            sweet = false;
+        }
+    }
+
+    Yes;
 
     return 0;
 }

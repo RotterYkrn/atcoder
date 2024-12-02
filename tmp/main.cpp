@@ -76,11 +76,11 @@ constexpr int dx8[8] = {-1, 0, 1, 1, 1, 0,-1,-1};
  mkvec<type>(n or {n1,n2,...}[, init])
 ****************************************/
 template<class T>
-inline auto mkvec(const int d, const T& init = T{}) noexcept {
+inline auto mkvec(const auto d, const T& init = T{}) noexcept {
     return vector<T>(d, init);
 }
 template<class T, size_t n, size_t idx = 0>
-auto mkvec(const int (&d)[n], const T& init = T{}) noexcept {
+auto mkvec(const auto (&d)[n], const T& init = T{}) noexcept {
     if constexpr (idx < n - 1) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
     else return mkvec<T>(d[idx], init);
 }
@@ -130,7 +130,7 @@ void input_cin(First& first, Rest&... rest) {
 #define inputll(...)    ll __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputs(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
 template <class T>
-inline auto inputv(const int d) {
+inline auto inputv(const auto d) {
     vector<T> vec(d);
     for (int i = 0; i < d; i++) {
         cin >> vec[i];
@@ -138,7 +138,7 @@ inline auto inputv(const int d) {
     return vec;
 }
 template<class T, size_t n, size_t idx = 0>
-auto inputv(const int (&d)[n]) noexcept {
+auto inputv(const auto (&d)[n]) noexcept {
     if constexpr (idx < n - 1) {
         int d_make[n - idx];
         copy(begin(d) + idx, end(d), begin(d_make));

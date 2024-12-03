@@ -41,6 +41,10 @@ using vpll = vector<pll>;
 #define INRANGE1(x, r)    (0 <= x && x < r)
 #define INRANGE2(x, l, r) (l <= x && x < r)
 #define ir(...) OVERLOAD_MACRO(__VA_ARGS__, INRANGE2, INRANGE1)(__VA_ARGS__)
+// range of iterator [left, right)]
+#define RANGE_TO_ITERATOR1(arr, left) arr.begin() + (left), arr.end()
+#define RANGE_TO_ITERATOR2(arr, left, right) arr.begin() + (left), arr.begin() + (right)
+#define rtoit(...) OVERLOAD_MACRO(__VA_ARGS__, RANGE_TO_ITERATOR2, RANGE_TO_ITERATOR1)(__VA_ARGS__)
 
 #define pb push_back
 #define mp make_pair

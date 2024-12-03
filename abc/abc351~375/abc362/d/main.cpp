@@ -244,8 +244,8 @@ int main() {
             que.push({d + b + V[nv], nv});
         }
     }
-    ans.erase(ans.begin(), ans.begin() + 1);
-    print(ans);
+    //ans.erase(ans.begin(), ans.begin() + 1);
+    print(vector<ll>(ans.begin() + 1, ans.end()));
 
     return 0;
 }

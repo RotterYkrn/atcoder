@@ -265,7 +265,7 @@ int main() {
             seen[ni][nj] = 1;
         }
     }
-    while (que.top().s <= ((str - 1) / X)) {
+    while (!que.empty() && que.top().s <= ((str - 1L) / X)) {
         auto slime = que.top(); que.pop();
         str += slime.s;
         rep(d, 4) {

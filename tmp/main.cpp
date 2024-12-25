@@ -142,6 +142,7 @@ void input_cin(First &first, Rest&... rest) {
 }
 #define inputi(...)    int __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputll(...)    ll __VA_ARGS__; input_cin(__VA_ARGS__);
+#define inputc(...)   char __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputs(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
 template<typename T1, typename T2>
 istream &operator>>(istream &in, pair<T1, T2> &p) {

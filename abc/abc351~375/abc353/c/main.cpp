@@ -8,7 +8,7 @@ using namespace std;
 #if __has_include(<atcoder/all>)
 #include <atcoder/all>
 using namespace atcoder;
-using mint = modint;
+using mint = modint998244353;
 // using mint = modint1000000007;
 #endif
 
@@ -142,6 +142,7 @@ void input_cin(First &first, Rest&... rest) {
 }
 #define inputi(...)    int __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputll(...)    ll __VA_ARGS__; input_cin(__VA_ARGS__);
+#define inputc(...)   char __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputs(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
 template<typename T1, typename T2>
 istream &operator>>(istream &in, pair<T1, T2> &p) {
@@ -245,11 +246,17 @@ T min(const vector<vector<T>> v) noexcept {
 
 
 int main() {
-    mint::set_mod(1e8);
     inputll(N);
     auto A = inputv<ll>(N);
+    sort(all(A));
 
-    
+    ll ans = 0;
+    rep(i, N) {
+        ll d = (ll)distance(A.begin(), lower_bound(A.begin(), A.end(), 1e8L - A[i]));
+        ans += A[i] * (N - 1) - 1e8L * (N - max(i + 1, d));
+    }
+
+    print(ans);
 
     return 0;
 }

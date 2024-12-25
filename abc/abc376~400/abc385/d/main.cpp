@@ -246,14 +246,58 @@ T min(const vector<vector<T>> v) noexcept {
 
 
 int main() {
-    inputll(N, M, Sx, Sy);
-    auto house = inputv<pll>(N);
+    inputll(N, M, X, Y);
+    map<ll, set<ll>> xy, yx;
+    rep(N) {
+        inputi(x, y);
+        xy[x].insert(y);
+        yx[y].insert(x);
+    }
 
-    ll ans = 0;
+    int ans = 0;
     rep(M) {
         inputc(d);
         inputll(c);
+        if (d == 'U') {
+            ll ny = Y + c;
+            auto it = lower_bound(all(xy[X]), Y);
+            while (it != xy[X].end() && *it <= ny) {
+                ans++;
+                yx[*it].erase(X);
+                it = xy[X].erase(it);
+            }
+            Y = ny;
+        } else if (d == 'D') {
+            ll ny = Y - c;
+            auto it = lower_bound(all(xy[X]), ny);
+            while (it != xy[X].end() && *it <= Y) {
+                ans++;
+                yx[*it].erase(X);
+                it = xy[X].erase(it);
+            }
+            Y = ny;
+        } else if (d == 'L') {
+            ll nx = X - c;
+            auto it = lower_bound(all(yx[Y]), nx);
+            while (it != yx[Y].end() && *it <= X) {
+                ans++;
+                xy[*it].erase(Y);
+                it = yx[Y].erase(it);
+            }
+            X = nx;
+        } else if (d == 'R') {
+            ll nx = X + c;
+            auto it = lower_bound(all(yx[Y]), X);
+            while (it != yx[Y].end() && *it <= nx) {
+                ans++;
+                xy[*it].erase(Y);
+                it = yx[Y].erase(it);
+            }
+            X = nx;
+        }
     }
+
+    print(X, Y, ans);
 
     return 0;
 }

@@ -19,13 +19,12 @@ using mint = modint998244353;
 struct Init { Init() { ios::sync_with_stdio(0); cin.tie(0); } }init;
 
 using ll = long long;
-using ull = unsigned long long;
 using pii = pair<int, int>;
+using pil = pair<int, ll>;
+using pli = pair<ll, int>;
 using pll = pair<ll, ll>;
 using vi = vector<int>;
-using vll = vector<ll>;
-using vpii = vector<pii>;
-using vpll = vector<pll>;
+using vl = vector<ll>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
@@ -38,9 +37,9 @@ using vpll = vector<pll>;
 #define RREP2(i, rbegin, rend) for (auto i = (rbegin - 1); (i) >= decay_t<decltype(rbegin)>{rend}; --(i))
 #define rrep(...) OVERLOAD_MACRO(__VA_ARGS__, RREP2, RREP1)(__VA_ARGS__)
 // is in [l,r)
-#define INRANGE1(x, r)    (0 <= x && x < r)
-#define INRANGE2(x, l, r) (l <= x && x < r)
-#define ir(...) OVERLOAD_MACRO(__VA_ARGS__, INRANGE2, INRANGE1)(__VA_ARGS__)
+#define IN_RANGE1(x, r)    (0 <= x && x < r)
+#define IN_RANGE2(x, l, r) (l <= x && x < r)
+#define ir(...) OVERLOAD_MACRO(__VA_ARGS__, IN_RANGE2, IN_RANGE1)(__VA_ARGS__)
 // from range to iterator [left, right)
 #define RANGE_TO_ITERATOR1(arr, left) arr.begin() + (left), arr.end()
 #define RANGE_TO_ITERATOR2(arr, left, right) arr.begin() + (left), arr.begin() + (right)
@@ -48,23 +47,18 @@ using vpll = vector<pll>;
 
 #define pb push_back
 #define mp make_pair
-#define all(x) x.begin(), x.end()
-#define rall(x) x.rbegin(), x.rend()
-#define el "\n"
-#define spa " "
-#define Yes cout << "Yes" << el
-#define No  cout << "No" << el
-#define yes cout << "yes" << el
-#define no  cout << "no" << el
-#define YES cout << "YES" << el
-#define NO  cout << "NO" << el
-#define YESNO(bool) if(bool) { cout << "YES" << el; } else { cout << "NO" << el; }
-#define YesNo(bool) if(bool) { cout << "Yes" << el; } else { cout << "No" << el; }
-#define yesno(bool) if(bool) { cout << "yes" << el; } else { cout << "no" << el; }
-#define eps (1e-10)
-#define Equals(a, b) (fabs((a) - (b)) < eps)
+#define all(container) container.begin(), container.end()
+#define rall(container) container.rbegin(), container.rend()
+#define YES cout << "YES\n"
+#define NO  cout << "NO\n"
+#define Yes cout << "Yes\n"
+#define No  cout << "No\n"
+#define yes cout << "yes\n"
+#define no  cout << "no\n"
+#define YESNO(bool) if(bool) YES; else NO
+#define YesNo(bool) if(bool) Yes; else No
+#define yesno(bool) if(bool) yes; else no
 #define isNum(s) all_of(all(s), [](char c){ return isdigit(c); })
-#define debug(x) cerr << #x << " = " << x << el
 
 constexpr int inf = 1073741823;
 constexpr ll infl = 1LL << 60;
@@ -73,18 +67,18 @@ const string abc = "abcdefghijklmnopqrstuvwxyz";
 
 // 4近傍、(一般的に)上右下左
 constexpr int dy[4] = {-1, 0, 1, 0};
-constexpr int dx[4] = { 0, 1, 0,-1};
+constexpr int dx[4] = {0, 1, 0,-1};
 
 // 8方向 左上, 上, 右上, 右, 右下, 下, 左下, 左
 constexpr int dy8[8] = {-1,-1,-1, 0, 1, 1, 1, 0};
 constexpr int dx8[8] = {-1, 0, 1, 1, 1, 0,-1,-1};
 
-template <typename T>
-struct is_vector : std::false_type { };
-template <typename T, typename Allocator>
-struct is_vector<std::vector<T, Allocator>> : std::true_type { };
-template <typename T>
-inline constexpr bool is_vector_v = is_vector<T>::value;
+template <class T>
+struct is_container : false_type { };
+template<template <class...> class Container, class T>
+struct is_container<Container<T>> : std::true_type { };
+template <class T>
+inline constexpr bool is_container_v = is_container<T>::value;
 
 /***************************************
  mkvec<type>(n or {n1,n2,...}[, init])
@@ -100,30 +94,30 @@ auto mkvec(const auto (&d)[n], const T &init = T{}) noexcept {
 }
 
 /***************************************
- pairとvectorを簡単に出力できるようにした
+ pairとコンテナを簡単に出力できるようにした
 ****************************************/
-template<class T1, class T2>
-ostream &operator<<(ostream &os, const pair<T1, T2> p) {
+template<class First, class Second>
+ostream &operator<<(ostream &os, const pair<First, Second> &p) {
     os << "(" << p.first << "," << p.second << ")";
     return os;
 }
-template<class T>
-ostream &operator<<(ostream &os, const vector<T> v) {
+template<template <class...> class Container, class T>
+ostream &operator<<(ostream &os, const Container<T> v) {
     if constexpr (is_same_v<T, string>) {
         for (auto it = v.begin(); it != v.end(); ++it) {
-            os << *it << (it + 1 != v.end() ? el : "");
+            os << *it << (next(it) != v.end() ? "\n" : "");
         }
     } else {
         for (auto it = v.begin(); it != v.end(); ++it) {
-            os << *it << (it + 1 != v.end() ? spa : "");
+            os << *it << (next(it) != v.end() ? " " : "");
         }
     }
     return os;
 }
-template<class T>
-ostream &operator<<(ostream &os, const vector<vector<T>> v) {
+template<template <class...> class Container1, template <class...> class Container2, class T>
+ostream &operator<<(ostream &os, const Container1<Container2<T>> v) {
     for (auto it = v.begin(); it != v.end(); ++it) {
-        os << *it << (it + 1 != v.end() ? el : "");
+        os << *it << (next(it) != v.end() ? "\n" : "");
     }
     return os;
 }
@@ -138,14 +132,14 @@ inline void input_cin(T &val) {
 template <class First, class... Rest>
 void input_cin(First &first, Rest&... rest) {
     cin >> first;
-    input_cin(rest...); // recursive call using pack expansion syntax
+    input_cin(rest...);
 }
 #define inputi(...)    int __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputll(...)    ll __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputc(...)   char __VA_ARGS__; input_cin(__VA_ARGS__);
 #define inputs(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
-template<typename T1, typename T2>
-istream &operator>>(istream &in, pair<T1, T2> &p) {
+template<class First, class Second>
+istream &operator>>(istream &in, pair<First, Second> &p) {
     in >> p.first >> p.second;
     return in;
 }
@@ -176,22 +170,22 @@ auto inputv(const D(&d)[n]) noexcept {
  Pythonのprintみたいなやつ
 **************************/
 inline void print() {
-    cout << el;
+    cout << "\n";
 }
 template <bool new_line = false, class T>
 inline void print(const T &t) {
-    if (new_line && is_vector_v<T>) {
-        cout << el;
+    if (new_line && is_container_v<T>) {
+        cout << "\n";
     }
-    cout << t << el;
+    cout << t << "\n";
 }
 template <bool new_line = false, class First, class... Rest>
 void print(const First &first, const Rest&... rest) {
-    if (new_line && is_vector_v<First>) {
-        cout << el;
+    if (new_line && is_container_v<First>) {
+        cout << "\n";
     }
-    cout << first << (is_vector_v<First> ? el : " ");
-    print<!is_vector_v<First>>(rest...); // recursive call using pack expansion syntax
+    cout << first << (is_container_v<First> ? "\n" : " ");
+    print<!is_container_v<First>>(rest...);
 }
 
 /*************************

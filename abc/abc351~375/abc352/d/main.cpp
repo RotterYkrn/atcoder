@@ -107,23 +107,23 @@ ostream &operator<<(ostream &os, const pair<T1, T2> p) {
     os << "(" << p.first << "," << p.second << ")";
     return os;
 }
-template<class T>
-ostream &operator<<(ostream &os, const vector<T> v) {
+template<template <class...> class Container, class T>
+ostream &operator<<(ostream &os, const Container<T> v) {
     if constexpr (is_same_v<T, string>) {
         for (auto it = v.begin(); it != v.end(); ++it) {
-            os << *it << (it + 1 != v.end() ? el : "");
+            os << *it << (next(it) != v.end() ? el : "");
         }
     } else {
         for (auto it = v.begin(); it != v.end(); ++it) {
-            os << *it << (it + 1 != v.end() ? spa : "");
+            os << *it << (next(it) != v.end() ? spa : "");
         }
     }
     return os;
 }
-template<class T>
-ostream &operator<<(ostream &os, const vector<vector<T>> v) {
+template<template <class...> class Container1, template <class...> class Container2, class T>
+ostream &operator<<(ostream &os, const Container1<Container2<T>> v) {
     for (auto it = v.begin(); it != v.end(); ++it) {
-        os << *it << (it + 1 != v.end() ? el : "");
+        os << *it << (next(it) != v.end() ? el : "");
     }
     return os;
 }
@@ -246,7 +246,27 @@ T min(const vector<vector<T>> v) noexcept {
 
 
 int main() {
+    inputi(N, K);
+    auto A = mkvec<pair<ll, int>>(N);
+    rep(i, N) {
+        cin >> A[i].first;
+        A[i].second = i;
+    }
+    sort(all(A));
 
+    set<int> idx;
+    int ans = inf;
+    rep(i, N) {
+        if (i < K) idx.insert(A[i].second);
+        else {
+            chmin(ans, *idx.rbegin() - *idx.begin());
+            idx.erase(A[i - K].second);
+            idx.insert(A[i].second);
+        }
+    }
+    chmin(ans, *idx.rbegin() - *idx.begin());
+
+    print(ans);
 
     return 0;
 }

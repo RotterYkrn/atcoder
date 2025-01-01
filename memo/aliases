@@ -5,7 +5,7 @@
 # -fconstexpr-loop-limit=2147483647 \
 # -fconstexpr-ops-limit=2147483647 main.cpp"
 
-# alias db="g++-12 -std=gnu++20 -O2 -Wall -Wextra \
+# alias db="g++-12 -std=gnu++20 -O0 -Wall -Wextra \
 # -Wfloat-equal -Wconversion -Wlogical-op -Wshift-overflow=2 \
 # -Wduplicated-cond -mtune=native -march=native \
 # -fconstexpr-depth=2147483647 \
@@ -13,6 +13,13 @@
 # -fconstexpr-ops-limit=2147483647 \
 # -g -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -fstack-protector \
 # -fsanitize=address -fsanitize=undefined -fno-sanitize-recover main.cpp"
+
+# function db() {
+#     g++-12 -std=gnu++2b -O2 -DONLINE_JUDGE -DATCODER -Wall -Wextra -mtune=native -march=native -fconstexpr-depth=2147483647 -fconstexpr-loop-limit=2147483647 -fconstexpr-ops-limit=2147483647 -g -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC main.cpp
+#     ./a.out 2>&1 | awk "/Error: /{print; getline; print}"
+#     g++-12 -std=gnu++2b -DONLINE_JUDGE -DATCODER -Wall -Wextra -mtune=native -march=native -fconstexpr-depth=2147483647 -fconstexpr-loop-limit=2147483647 -fconstexpr-ops-limit=2147483647 -g -fstack-protector -fsanitize=address -fsanitize=undefined main.cpp
+#     ./a.out 2>&1 | grep "SUMMARY"
+# }
 
 alias g+="g++-12 -std=gnu++2b -O2 -DONLINE_JUDGE -DATCODER \
 -Wall -Wextra -mtune=native -march=native \
@@ -24,7 +31,7 @@ alias db="g++-12 -std=gnu++2b -O2 -DONLINE_JUDGE -DATCODER \
 -fconstexpr-depth=2147483647 -fconstexpr-loop-limit=2147483647 \
 -fconstexpr-ops-limit=2147483647 \
 -g -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -fstack-protector \
--fsanitize=address -fsanitize=undefined -fno-sanitize-recover main.cpp"
+-fsanitize=address -fsanitize=undefined main.cpp"
 
 alias cpt="cp ~/atcoder/tmp/main.cpp ./"
 

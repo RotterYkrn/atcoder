@@ -30,6 +30,7 @@
 *.exe
 a.out
 *.app
+main
 
 .vscode/
 work/

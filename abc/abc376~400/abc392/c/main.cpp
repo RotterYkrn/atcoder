@@ -240,26 +240,15 @@ T min(const vector<vector<T>> v) noexcept {
 
 
 int main() {
-    inputll(N, W);
-    auto col = mkvec<pair<ll, int>>({W,0LL});
+    inputi(N);
+    auto P = inputv<int>(N);
+    auto Q = inputv<int>(N);
+
+    auto ans = mkvec<int>(N);
     rep(i, N) {
-        inputll(X, Y);
-        col[X - 1].pb({Y,i});
+        ans[Q[i] - 1] = Q[P[i] - 1];
     }
-    for (auto &i : col) sort(all(i));
-
-    auto deleted_time = mkvec<ll>(N, infl);
-    auto block_col = mkvec<int>(N);
-    rep(i, W) {
-        if (col[i].size() == 0) continue;
-    }
-
-    //print(deleted_time);
-    inputi(Q);
-    rep(Q) {
-        inputll(T, A);
-        YesNo(deleted_time[A - 1] > T);
-    }
+    print(ans);
 
     return 0;
 }

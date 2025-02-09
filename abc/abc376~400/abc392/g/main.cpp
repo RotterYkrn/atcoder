@@ -238,28 +238,28 @@ T min(const vector<vector<T>> v) noexcept {
 #pragma endregion template
 #endif
 
-
 int main() {
-    inputll(N, W);
-    auto col = mkvec<pair<ll, int>>({W,0LL});
-    rep(i, N) {
-        inputll(X, Y);
-        col[X - 1].pb({Y,i});
-    }
-    for (auto &i : col) sort(all(i));
+    inputi(N);
+    auto S = inputv<ll>(N);
+    sort(all(S));
 
-    auto deleted_time = mkvec<ll>(N, infl);
-    auto block_col = mkvec<int>(N);
-    rep(i, W) {
-        if (col[i].size() == 0) continue;
+    ll ans = 0;
+    rep(i, N - 2) {
+        int left = i + 2;
+        rep(j, i + 1, N - 1) {
+            ll tmp = 2 * S[j] - S[i];
+            auto it = lower_bound(S.begin() + left, S.end(), tmp);
+            //print(S[i], S[j], *it);
+            if (it == S.end()) {
+                break;
+            } else if (*it == tmp) {
+                ans++;
+            }
+            left = (int)distance(S.begin(), it);
+        }
     }
 
-    //print(deleted_time);
-    inputi(Q);
-    rep(Q) {
-        inputll(T, A);
-        YesNo(deleted_time[A - 1] > T);
-    }
+    print(ans);
 
     return 0;
 }

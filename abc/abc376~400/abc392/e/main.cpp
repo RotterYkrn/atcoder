@@ -238,27 +238,69 @@ T min(const vector<vector<T>> v) noexcept {
 #pragma endregion template
 #endif
 
+struct OpCable {
+    int i, before, after;
+};
 
 int main() {
-    inputll(N, W);
-    auto col = mkvec<pair<ll, int>>({W,0LL});
+    inputi(N, M);
+    auto graph = mkvec<pair<int, int>>({N,0});
+    rep(i, M) {
+        inputi(a, b);
+        a--; b--;
+        graph[a].pb({b, i});
+        graph[b].pb({a, i});
+    }
+
+    dsu uf(N);
+    auto used = mkvec<int>(M);
+    queue<OpCable> usable;
+    auto dfs = [&](auto dfs, int v, int bv, int cable) -> void {
+        if (uf.same(v, bv)) {
+            usable.push({cable, v, bv});
+            return;
+        }
+
+        uf.merge(v, bv);
+
+        for (const auto &[nv, c] : graph[v]) {
+            if (used[c]) continue;
+            used[c] = true;
+            dfs(dfs, nv, v, c);
+        }
+    };
+
+    auto ans = mkvec<OpCable>(0);
+    queue<int> disconnected;
     rep(i, N) {
-        inputll(X, Y);
-        col[X - 1].pb({Y,i});
-    }
-    for (auto &i : col) sort(all(i));
+        if (i != 0) {
+            if (uf.same(i, 0)) continue;
+            else disconnected.push(i);
+        } else if (graph[0].size() == 0) {
+            disconnected.push(0);
+            continue;
+        }
 
-    auto deleted_time = mkvec<ll>(N, infl);
-    auto block_col = mkvec<int>(N);
-    rep(i, W) {
-        if (col[i].size() == 0) continue;
+        for (const auto &[nv, c] : graph[i]) {
+            if (used[c]) continue;
+            used[c] = true;
+            dfs(dfs, nv, i, c);
+        }
+
+        while (!disconnected.empty() && !usable.empty()) {
+            auto dv = disconnected.front();
+            disconnected.pop();
+            auto [c, u, v] = usable.front();
+            if (uf.same(dv, u)) continue;
+            usable.pop();
+            uf.merge(dv, 0);
+            ans.pb({c, v, dv});
+        }
     }
 
-    //print(deleted_time);
-    inputi(Q);
-    rep(Q) {
-        inputll(T, A);
-        YesNo(deleted_time[A - 1] > T);
+    print(ans.size());
+    for (const auto &[c, v, dv] : ans) {
+        print(c + 1, v + 1, dv + 1);
     }
 
     return 0;

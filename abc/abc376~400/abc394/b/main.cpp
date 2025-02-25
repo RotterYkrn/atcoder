@@ -101,8 +101,8 @@ ostream &operator<<(ostream &os, const pair<First, Second> &p) {
     os << "(" << p.first << "," << p.second << ")";
     return os;
 }
-template<template <class...> class Container, class T>
-ostream &operator<<(ostream &os, const Container<T> v) {
+template<class T>
+ostream &operator<<(ostream &os, const vector<T> v) {
     if constexpr (is_same_v<T, string>) {
         for (auto it = v.begin(); it != v.end(); ++it) {
             os << *it << (next(it) != v.end() ? "\n" : "");
@@ -114,8 +114,8 @@ ostream &operator<<(ostream &os, const Container<T> v) {
     }
     return os;
 }
-template<template <class...> class Container1, template <class...> class Container2, class T>
-ostream &operator<<(ostream &os, const Container1<Container2<T>> v) {
+template<class T>
+ostream &operator<<(ostream &os, const vector<vector<T>> v) {
     for (auto it = v.begin(); it != v.end(); ++it) {
         os << *it << (next(it) != v.end() ? "\n" : "");
     }
@@ -247,9 +247,7 @@ int main() {
     });
 
     for (auto &s : S) {
-        for (auto &c : s) {
-            cout << c;
-        }
+        cout << s;
     }
     cout << "\n";
 

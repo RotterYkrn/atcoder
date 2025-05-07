@@ -238,64 +238,76 @@ T min(const vector<vector<T>> v) noexcept {
 #pragma endregion template
 #endif
 
-int main() {
-    inputll(N, D);
+struct Options {
+    int l = 0;
+    int r = numeric_limits<int>::max();
+    int step = 1;  // デフォルト値
+};
+template <class T>
+T pyslice(const T &v, Options opt) {
+    T result;
+    auto [l, r, step] = opt;
 
-    map<int, map<ll, ll>> mp;
-    rep(N) {
-        inputll(a);
-        if (mp.find(a % D) == mp.end()) {
-            mp[a % D] = map<ll, ll>();
-        }
-        mp[a % D][a]++;
+    if (step == 0) {
+        throw invalid_argument("step cannot be zero");
     }
 
-    auto rec = [&](auto self, const int i, const int isDeleted, const ll deleteNum, auto &list, auto &dp) {
-        if (i == (int)list.size()) {
-            return deleteNum;
+    int size = static_cast<int>(v.size());
+
+    // 負のインデックスを補正
+    if (l < 0) l += size;
+    if (r == numeric_limits<int>::max()) r = (step > 0) ? size : -1;
+    if (r < 0) r += size;
+
+    // 範囲を制限
+    if (step > 0) {
+        if (l < 0) l = 0;
+        if (r > size) r = size;
+        for (int i = l; i < r; i += step) {
+            result.push_back(v[i]);
         }
-
-        if (dp[i][0] != -1LL && dp[i][1] != -1LL) {
-            return min(dp[i][0], dp[i][1]);
+    } else {
+        if (l >= size) l = size - 1;
+        if (r < -1) r = -1;
+        for (int i = l; i > r; i += step) {
+            if (i >= 0 && i < size)
+                result.push_back(v[i]);
         }
+    }
 
-        ll res = 0;
-        if (isDeleted == 0) {
-            if (dp[i][1] != -1LL) {
-                return dp[i][1];
-            }
-            res = dp[i][1] = self(self, i + 1, 1, deleteNum + list[i].second, list, dp);
-        } else {
-            if (dp[i][0] != -1LL) {
-                res = dp[i][0];
-            } else {
-                res = dp[i][0] = self(self, i + 1, 0, deleteNum, list, dp);
-            }
+    return result;
+}
 
-            if (dp[i][1] != -1LL) {
-                chmin(res, dp[i][1]);
-            } else {
-                if (i + 1 < (int)list.size()
-                    && list[i + 1].first == list[i].first + D) {
-                    dp[i][1] = self(self, i + 1, 1, deleteNum + list[i].second, list, dp);
-                    chmin(res, dp[i][1]);
-                } else if (isDeleted == 2) {
-                    dp[i][1] = infl;
-                }
-            }
+int main() {
+    inputi(N, D);
+    auto cnt = mkvec<ll>(1e6 + 1);
+    rep(N) {
+        inputi(a);
+        ++cnt[a];
+    }
+
+    if (D == 0) {
+        ll ans = 0;
+        for (auto c : cnt) {
+            ans += max(c - 1, 0LL);
         }
+        return 0;
+    }
 
-        return res;
+    auto rec = [&](const int i) -> ll {
+        auto x = pyslice(cnt, {.l = i, .step = D});
+        if (x.empty()) return 0;
+        x.insert(x.begin(), 0);
+        auto dp = mkvec<ll>(x.size() + 1);
+        rep(j, 1, x.size()) {
+            dp[j + 1] = min(dp[j] + x[j], dp[j - 1] + x[j - 1]);
+        }
+        return dp.back();
     };
 
     ll ans = 0;
-    for (const auto &i : mp) {
-        auto list = mkvec<pll>(0);
-        for (const auto &j : i.second) {
-            list.push_back(j);
-        }
-        auto dp = mkvec<ll>({(int)list.size(),2}, -1LL);
-        ans += rec(rec, 0, 1, 0, list, dp);
+    rep(i, D) {
+        ans += rec(i);
     }
     print(ans);
 

@@ -84,11 +84,11 @@ inline constexpr bool is_container_v = is_container<T>::value;
  mkvec<type>(n or {n1,n2,...}[, init])
 ****************************************/
 template<class T>
-inline auto mkvec(const auto d, const T &init = T{}) noexcept {
+inline auto mkvec(const auto d, const T &init = T{}) {
     return vector<T>(d, init);
 }
 template<class T, size_t n, size_t idx = 0>
-auto mkvec(const auto (&d)[n], const T &init = T{}) noexcept {
+auto mkvec(const auto (&d)[n], const T &init = T{}) {
     if constexpr (idx < n - 1) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
     else return mkvec<T>(d[idx], init);
 }
@@ -152,7 +152,7 @@ inline auto inputv(const auto d) {
     return vec;
 }
 template<class T, class D, size_t n, size_t idx = 0>
-auto inputv(const D(&d)[n]) noexcept {
+auto inputv(const D(&d)[n]) {
     if constexpr (idx < n - 1) {
         D d_make[n - idx];
         copy(begin(d) + idx, end(d), begin(d_make));
@@ -192,13 +192,13 @@ void print(const First &first, const Rest&... rest) {
  値が大きい、小さい方を代入
 **************************/
 template<class T1, class T2>
-inline bool chmax(T1 &a, const T2 b) noexcept {
+inline bool chmax(T1 &a, const T2 b) {
     bool compare = a < b;
     if (compare) a = b;
     return compare;
 }
 template<class T1, class T2>
-inline bool chmin(T1 &a, const T2 b) noexcept {
+inline bool chmin(T1 &a, const T2 b) {
     bool compare = a > b;
     if (compare) a = b;
     return compare;
@@ -207,18 +207,18 @@ inline bool chmin(T1 &a, const T2 b) noexcept {
  vectorの最大値、最小値
 **************************/
 template<class T>
-inline T max(const vector<T> v) noexcept {
+inline T max(const vector<T> v) {
     return *max_element(all(v));
 }
 template<class T>
-inline T min(const vector<T> v) noexcept {
+inline T min(const vector<T> v) {
     return *min_element(all(v));
 }
 /***************************
  2次元vectorの最大値、最小値
 ****************************/
 template<class T>
-T max(const vector<vector<T>> v) noexcept {
+T max(const vector<vector<T>> v) {
     T maxValue = numeric_limits<T>::lowest();
     for (const auto &i : v) {
         chmax(maxValue, max(i));
@@ -226,7 +226,7 @@ T max(const vector<vector<T>> v) noexcept {
     return maxValue;
 }
 template<class T>
-T min(const vector<vector<T>> v) noexcept {
+T min(const vector<vector<T>> v) {
     T minValue = numeric_limits<T>::max();
     for (const auto &i : v) {
         chmin(minValue, min(i));

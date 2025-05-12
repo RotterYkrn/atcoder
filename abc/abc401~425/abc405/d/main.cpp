@@ -238,10 +238,54 @@ T min(const vector<vector<T>> v) noexcept {
 #pragma endregion template
 #endif
 
+struct State {
+    // dir: 0: up, 1: right, 2: down, 3: left
+    int i, j, dir;
+};
 
 int main() {
     inputi(H, W);
     auto grid = inputv<string>(H);
+
+    queue<State> que;
+    rep(i, H) rep(j, W) {
+        if (grid[i][j] == 'E') {
+            que.push({i, j, -1});
+        }
+    }
+
+    auto ans = grid;
+    while (!que.empty()) {
+        auto [i, j, dir] = que.front();
+        que.pop();
+
+        if (dir != -1 && ans[i][j] != '.') continue;
+
+        switch (dir) {
+        case 0:
+            ans[i][j] = 'v';
+            break;
+        case 1:
+            ans[i][j] = '<';
+            break;
+        case 2:
+            ans[i][j] = '^';
+            break;
+        case 3:
+            ans[i][j] = '>';
+            break;
+        default:
+            break;
+        }
+
+        for (int k = 0; k < 4; k++) {
+            int ni = i + dy[k], nj = j + dx[k];
+            if (!ir(ni, H) || !ir(nj, W) || ans[ni][nj] != '.') continue;
+            que.push({ni, nj, k});
+        }
+    }
+
+    print(ans);
 
     return 0;
 }

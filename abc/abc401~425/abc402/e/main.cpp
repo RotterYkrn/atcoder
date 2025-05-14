@@ -238,9 +238,21 @@ T min(const vector<vector<T>> v) noexcept {
 #pragma endregion template
 #endif
 
+struct Problem {
+    int s, c, p;
+};
 
 int main() {
+    inputi(N, X);
+    auto P = mkvec<Problem>(N);
+    for (auto &[s, c, p] : P) {
+        cin >> s >> c >> p;
+    }
 
+    auto E = mkvec<double>(N);
+    rep(i, N) {
+        E[i] = (double)P[i].s / (double)P[i].c;
+    }
 
     return 0;
 }

@@ -240,7 +240,21 @@ T min(const vector<vector<T>> v) noexcept {
 
 
 int main() {
+    inputll(N, M);
 
+    auto lines = mkvec<ll>(N);
+    rep(M) {
+        inputi(a, b);
+        int same_line = (a + b - 1) % N;
+        lines[same_line]++;
+    }
+
+    ll ans = M * (M - 1LL) / 2LL;
+    for (auto l : lines) {
+        if (l <= 1) continue;
+        ans -= l * (l - 1LL) / 2LL;
+    }
+    print(ans);
 
     return 0;
 }

@@ -114,7 +114,7 @@
 	"SegmentTree": {
 		"prefix": "seg",
 		"body": [
-			"template<class T, const T& (* const op)(const T &, const T &) = max, const T e = T()>",
+			"template<class T, T (*op)(T, T) = max, T (*e)() = T()>",
 			"struct SegTree {",
 			"\tvector<T> tree, lazy;",
 			"\tsize_t n;",
@@ -125,7 +125,7 @@
 			"\t\twhile (tree_size < N) {",
 			"\t\t\ttree_size *= 2;",
 			"\t\t}",
-			"\t\ttree = vector<T>(tree_size * 2, e);",
+			"\t\ttree = vector<T>(tree_size * 2, e());",
 			"\t\tlazy = vector<T>(tree_size * 2, LAZY_DEF);",
 			"\t\tn = tree_size;",
 			"\t}",
@@ -170,7 +170,7 @@
 			"\tT query_sub(const size_t ql, const size_t qr, const size_t node, const size_t nl, const size_t nr) {",
 			"\t\tdelayed_evaluation(node);",
 			"\t\tif (nr <= ql || qr <= nl) {",
-			"\t\t\treturn e;",
+			"\t\t\treturn e();",
 			"\t\t} else if (ql <= nl && nr <= qr) {",
 			"\t\t\treturn tree[node];",
 			"\t\t} else {",

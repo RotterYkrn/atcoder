@@ -25,6 +25,7 @@ using pli = pair<ll, int>;
 using pll = pair<ll, ll>;
 using vi = vector<int>;
 using vl = vector<ll>;
+using vs = vector<string>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)

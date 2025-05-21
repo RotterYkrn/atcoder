@@ -114,7 +114,7 @@
 	"SegmentTree": {
 		"prefix": "seg",
 		"body": [
-			"template<class T, T (*op)(T, T) = max, T (*e)() = T()>",
+			"template<class T, T (*op)(T, T), T (*e)()>",
 			"struct SegTree {",
 			"\tvector<T> tree, lazy;",
 			"\tint n;",

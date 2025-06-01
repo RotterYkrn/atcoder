@@ -241,7 +241,18 @@ T min(const vector<vector<T>> v) {
 
 
 int main() {
-
+    inputi(N, M);
+    auto imos = mkvec<int>(N);
+    rep(M) {
+        inputi(l, r);
+        imos[l - 1]++;
+        if (r < N)
+            imos[r]--;
+    }
+    rep(i, N - 1) {
+        imos[i + 1] += imos[i];
+    }
+    print(min(imos));
 
     return 0;
 }

@@ -241,6 +241,15 @@ T min(const vector<vector<T>> v) {
 
 
 int main() {
+    inputi(N, M);
+    auto graph = mkvec<pil>({N,0});
+    rep(M) {
+        inputi(u, v);
+        inputll(w);
+        graph[u - 1].push_back({v - 1, w});
+        graph[v - 1].push_back({u - 1, w});
+    }
+
 
 
     return 0;

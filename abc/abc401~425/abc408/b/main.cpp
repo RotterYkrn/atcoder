@@ -241,7 +241,18 @@ T min(const vector<vector<T>> v) {
 
 
 int main() {
+    inputi(N);
+    set<int> s;
+    rep(N) {
+        inputi(a);
+        s.insert(a);
+    }
 
+    print(s.size());
+    for (auto i : s) {
+        cout << i << " ";
+    }
+    cout << "\n";
 
     return 0;
 }

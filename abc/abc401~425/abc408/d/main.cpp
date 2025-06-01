@@ -241,7 +241,52 @@ T min(const vector<vector<T>> v) {
 
 
 int main() {
+    inputi(T);
 
+    rep(T) {
+        inputi(N);
+        inputs(S);
+
+        int sum = 0, max_cnt = 0, cnt = 0, group_num = 0;
+        bool flag = true;
+        auto bw = mkvec<int>(0);
+        if (S[0] == '0') {
+            bw.pb(0);
+        }
+        rep(i, N) {
+            if (flag) {
+                if (S[i] == '0') {
+                    flag = false;
+                    bw.pb(cnt);
+                    sum += cnt;
+                    cnt = 1;
+                } else {
+                    ++cnt;
+                }
+            } else {
+                if (S[i] == '1') {
+                    flag = true;
+                    bw.pb(cnt);
+                    group_num++;
+                    cnt = 1;
+                } else {
+                    cnt++;
+                }
+            }
+        }
+        bw.pb(cnt);
+
+        if (group_num < 2) {
+            print(0);
+            continue;
+        }
+
+        int l(0), r(0), num0 = 0, num1 = bw[1], ans = inf;
+        while (l < (int)bw.size()) {
+            if (chmin(ans, num0 + sum - num1));
+
+        }
+    }
 
     return 0;
 }

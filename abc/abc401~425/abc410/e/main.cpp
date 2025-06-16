@@ -241,7 +241,35 @@ T min(const vector<vector<T>> v) {
 
 
 int main() {
+    inputi(N, H, M);
 
+    auto dp = mkvec<int>({N + 1, H + 1}, -1);
+    dp[0][H] = M;
+
+    int ans = 0;
+    rep(i, N) {
+        inputi(a, b);
+        bool is_killed = false;
+        rep(h, H + 1) {
+            if (dp[i][h] == -1) continue;
+            if (a <= h) {
+                chmax(dp[i + 1][h - a], dp[i][h]);
+                is_killed = true;
+            }
+            if (b <= dp[i][h]) {
+                chmax(dp[i + 1][h], dp[i][h] - b);
+                is_killed = true;
+            }
+        }
+        if (!is_killed) {
+            ans = i;
+            break;
+        } else if (i == N - 1) {
+            ans = N;
+        }
+    }
+
+    print(ans);
 
     return 0;
 }

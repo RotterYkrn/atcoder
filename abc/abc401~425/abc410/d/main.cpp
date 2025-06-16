@@ -249,42 +249,27 @@ int main() {
         graph[a].push_back({b,w});
     }
 
-    auto opt_v = mkvec<int>({N, 10}, -1);
-    auto rec = [&](auto rec, const int i, const auto w_bit) -> void {
-        bool is_updated = false;
-        rep(d, 10) {
-            if (opt_v[i][d] == -1) {
-                opt_v[i][d] = w_bit[d];
-                is_updated = true;
-            } else if (opt_v[i][d] != w_bit[d]) {
-                opt_v[i][d] = 2;
-                is_updated = true;
-            }
-        }
+    auto graph_double = mkvec<int>({N,1024});
 
-        if (!is_updated) return;
-
-        for (auto [v, w] : graph[i]) {
-            auto nbit = w_bit;
-            rep(d, 10) {
-                nbit[d] ^= (w & (1 << d) ? 1 : 0);
-            }
-            rec(rec, v, nbit);
+    auto dfs = [&](auto dfs, int v, int x) -> void {
+        if (graph_double[v][x]) return;
+        graph_double[v][x] = 1;
+        for (auto [to, w] : graph[v]) {
+            dfs(dfs, to, x ^ w);
         }
+        return;
     };
 
-    rec(rec, 0, mkvec<int>(10, 0));
-    if (opt_v[N - 1][0] == -1) {
-        print(-1);
-        return 0;
-    }
+    dfs(dfs, 0, 0);
 
-    int ans = 0;
-    rep(d, 10) {
-        if (opt_v[N - 1][d] == 1) {
-            ans |= (1 << d);
+    int ans = -1;
+    rep(i, 1024) {
+        if (graph_double[N - 1][i]) {
+            ans = i;
+            break;
         }
     }
+
     print(ans);
 
     return 0;

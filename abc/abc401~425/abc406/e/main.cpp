@@ -241,7 +241,7 @@ T min(const vector<vector<T>> v) {
 
 struct Combination {
     vector<long long> fac, finv;
-    const int MOD = modint1000000007::mod();
+    const int MOD = modint::mod();
 
     explicit Combination(int N) : fac(N), finv(N) {
         vector<long long> inv(N);
@@ -265,49 +265,54 @@ struct Combination {
 int main() {
     vector<ll> pow2(61);
     pow2[0] = 1;
-    rep(i, 1, 60) {
+    rep(i, 1, 61) {
         pow2[i] = pow2[i - 1] * 2;
     }
-    Combination com(60);
+    Combination com(61);
 
     ll N = 0;
     int K = 0;
-    auto imos = mkvec<mint>(60);
+    auto imos = mkvec<mint>(61);
     auto rec = [&](auto self, const int d, const int k) -> mint {
-        if (k == 1) {
-            imos[d]++;
-            return d + 1;
+        if (k == 0) {
+            return 1;
+        } else if (d == -1) {
+            return 0;
         }
 
-        mint com_num = com.calc(d, k);
         int nd = d - 1;
         while (nd >= 0) {
-            if (N & (1 << nd)) {
+            if (N & (1LL << nd)) {
                 break;
             }
             nd--;
         }
-        mint res = self(self, d - 1, k - 1);
-        imos[d] += res;
-        imos[d - 1] += com_num - res;
-        return res + com_num;
+
+        mint ret = self(self, nd, k - 1);
+        imos[d] += ret;
+        imos[d + 1] -= ret;
+
+        mint c = com.calc(d - 1, k - 1);
+        imos[0] += c;
+        imos[d] -= c;
+
+        return ret + mint(com.calc(d, k));
     };
 
     inputi(T);
     rep(T) {
         cin >> N >> K;
         fill(all(imos), 0);
-        int d_max = (int)distance(pow2.begin(), lower_bound(all(pow2), N));
-        if ((int)bitset<60>(N).count() >= K) {
-            rec(rec, d_max, K);
-        }
+        int d_max = (int)distance(pow2.begin(), lower_bound(all(pow2), N + 1)) - 1;
 
-        rrep(i, d_max + 1, 1) {
-            imos[i - 1] += imos[i];
+        rec(rec, d_max, K);
+
+        rep(i, d_max + 1) {
+            imos[i + 1] += imos[i];
         }
 
         mint ans = 0;
-        rep(i, 0, d_max) {
+        rep(i, d_max + 1) {
             ans += mint(imos[i]) * mint(pow2[i]);
         }
         print(ans.val());

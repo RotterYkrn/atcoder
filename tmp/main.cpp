@@ -10,6 +10,8 @@ using namespace std;
 using namespace atcoder;
 using mint = modint998244353;
 // using mint = modint1000000007;
+// using mint = modint;
+// mint::set_mod(MOD);
 #endif
 
 // おまじない
@@ -241,7 +243,6 @@ T min(const vector<vector<T>> v) {
 
 
 int main() {
-
 
     return 0;
 }

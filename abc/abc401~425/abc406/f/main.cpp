@@ -241,7 +241,56 @@ T min(const vector<vector<T>> v) {
 
 
 int main() {
+    inputi(N);
+    auto graph = mkvec<int>({N,0});
+    vector<int> u(N), v(N);
+    rep(i, N - 1) {
+        cin >> u[i] >> v[i];
+        u[i]--; v[i]--;
+        graph[u[i]].pb(v[i]);
+        graph[v[i]].pb(u[i]);
+    }
 
+    auto l_idx = mkvec<int>(N, -1);
+    auto r_idx = mkvec<int>(N, -1);
+    int cur = 0;
+    auto dfs = [&](auto dfs, int v) -> void {
+        l_idx[v] = cur;
+        cur++;
+        for (auto nv : graph[v]) {
+            if (l_idx[nv] == -1) {
+                dfs(dfs, nv);
+            }
+        }
+        r_idx[v] = cur;
+    };
+
+    dfs(dfs, 0);
+
+    fenwick_tree<int> ft(N);
+    rep(i, N) {
+        ft.add(i, 1);
+    }
+    int all_sum = N;
+
+    inputi(Q);
+    rep(Q) {
+        inputi(q, x);
+        x--;
+        if (q == 1) {
+            inputi(w);
+            ft.add(l_idx[x], w);
+            all_sum += w;
+        } else {
+            int y;
+            if (l_idx[u[x]] < l_idx[v[x]]) {
+                y = v[x];
+            } else {
+                y = u[x];
+            }
+            print(abs(all_sum - 2 * ft.sum(l_idx[y], r_idx[y])));
+        }
+    }
 
     return 0;
 }

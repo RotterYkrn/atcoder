@@ -88,7 +88,7 @@
 		"body": [
 			"struct Combination {",
 			"\tvector<long long> fac, finv;",
-			"\tconst int MOD = modint::mod();",
+			"\tconst int MOD = mint::mod();",
 			"\t",
 			"\texplicit Combination(int N) : fac(N), finv(N) {",
 			"\t\tvector<long long> inv(N);",

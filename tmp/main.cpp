@@ -14,12 +14,6 @@ using mint = modint998244353;
 // mint::set_mod(MOD);
 #endif
 
-// おまじない
-#pragma GCC target("avx")
-#pragma GCC optimize("O3")
-#pragma GCC optimize("unroll-loops")
-struct Init { Init() { ios::sync_with_stdio(0); cin.tie(0); } }init;
-
 using ll = long long;
 using pii = pair<int, int>;
 using pil = pair<int, ll>;

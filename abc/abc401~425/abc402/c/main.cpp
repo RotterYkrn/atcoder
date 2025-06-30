@@ -241,25 +241,25 @@ T min(const vector<vector<T>> v) noexcept {
 
 int main() {
     inputi(N, M);
-
-    auto dishes = mkvec<unordered_set<int>>(N);
+    auto f_d = mkvec<int>({N,0});
+    auto d_fnum = mkvec<int>(M);
     rep(i, M) {
         inputi(k);
+        d_fnum[i] = k;
         rep(k) {
             inputi(a);
-            dishes[i].insert(a);
+            --a;
+            f_d[a].push_back(i);
         }
     }
 
     int ans = 0;
     rep(N) {
         inputi(b);
-        for (auto &d : dishes) {
-            if (d.empty()) continue;
-            d.erase(b);
-            if (d.empty()) {
-                ++ans;
-            }
+        b--;
+        for (auto d : f_d[b]) {
+            d_fnum[d]--;
+            if (d_fnum[d] == 0) ans++;
         }
         print(ans);
     }

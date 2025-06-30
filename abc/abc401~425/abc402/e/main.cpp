@@ -16,7 +16,6 @@ using mint = modint998244353;
 #pragma GCC target("avx")
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")
-struct Init { Init() { ios::sync_with_stdio(0); cin.tie(0); } }init;
 
 using ll = long long;
 using pii = pair<int, int>;
@@ -239,7 +238,8 @@ T min(const vector<vector<T>> v) noexcept {
 #endif
 
 struct Problem {
-    int s, c, p;
+    int s, c;
+    double p;
 };
 
 int main() {
@@ -247,12 +247,24 @@ int main() {
     auto P = mkvec<Problem>(N);
     for (auto &[s, c, p] : P) {
         cin >> s >> c >> p;
+        p /= 100.0;
     }
 
-    auto E = mkvec<double>(N);
-    rep(i, N) {
-        E[i] = (double)P[i].s / (double)P[i].c;
+    auto dp = mkvec<double>({1 << N, X + 1}, 0.0);
+    rep(x, X + 1) {
+        rep(s, 1 << N) {
+            rep(i, N) {
+                int nx = x - P[i].c;
+                int ns = s | (1 << i);
+                if (nx < 0 || ns == s) {
+                    continue;
+                }
+                chmax(dp[s][x], P[i].p * (dp[ns][nx] + P[i].s) + (1.0 - P[i].p) * dp[s][nx]);
+            }
+        }
     }
+
+    printf("%.10lf\n", dp[0][X]);
 
     return 0;
 }

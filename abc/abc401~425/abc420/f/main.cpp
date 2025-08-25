@@ -237,6 +237,12 @@ T min(const vector<vector<T>> v) {
 
 
 int main() {
+    inputi(N, M, K);
+    auto grid = inputv<string>(N);
+    auto wall = mkvec<int>(N, -1);
+    rep(i, M) {
+
+    }
 
     return 0;
 }

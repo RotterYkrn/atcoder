@@ -287,24 +287,130 @@ bool dfs(const Point cur, const Point g, const vector<string> &B) {
     return seen[g.first][g.second];
 }
 
-vector<vector<bool>> setLoad(const vector<string> &B) {
-    int N = B.size();
-    auto load = mkvec<bool>({N, N}, false);
+void setLoad(vector<string> &B) {
+    const int N = B.size();
+
+    int s = 0;
+    // 左端
     rep(i, N) {
-        rep(j, N - 1) {
-            if (B[i][j] == '.') {
-                load[i][j] = true;
-            }
+        if (B[0][i] == '.') {
+            s = i;
+            break;
         }
     }
-    return load;
+    rep(i, N) {
+        B[i][s] = 'x';
+        while (s > 0 && B[i][s - 1] == '.') {
+            B[i][s - 1] = 'x';
+            s--;
+        }
+        bool stop = false;
+        while (i < N - 1) {
+            if (B[i][s] != 'T' && B[i + 1][s] != 'T') {
+                break;
+            } else if (B[i][s] == 'T') {
+                stop = true;
+                s--;
+                break;
+            }
+            B[i][s] = 'x';
+            s++;
+        }
+        // if (stop) {
+        //     int k[] = {0,1,2,3};
+        //     stack<Point> st;
+        //     st.push({i, s});
+        //     while (!st.empty()) {
+        //         auto p = st.top();
+        //         st.pop();
+        //         if (p.first == i + 1) {
+        //             s = p.second;
+        //         }
+        //         rep(d, 4) {
+        //             int ni = p.first + dy[k[d]];
+        //             int nj = p.second + dx[k[d]];
+        //             if (!ir(ni, N)
+        //               || !ir(nj, N)
+        //               || B[ni][nj] != '.') continue;
+        //             B[ni][nj] = 'x';
+        //             st.push({ni, nj});
+        //         }
+        //     }
+        // }
+        B[i][s] = 'x';
+    }
+
+    // 右端
+    rep(i, N) {
+        if (B[0][N - i - 1] == '.') {
+            s = N - i - 1;
+            break;
+        }
+    }
+    int ri = 0;
+    while (ri < N) {
+        B[ri][s] = 'x';
+        while (s < N - 1 && B[ri][s + 1] == '.') {
+            B[ri][s + 1] = 'x';
+            s++;
+        }
+        bool stop = false;
+        while (ri < N - 1) {
+            if (B[ri][s] != 'T' && B[ri + 1][s] != 'T') {
+                break;
+            } else if (B[ri][s] == 'T') {
+                stop = true;
+                s++;
+                break;
+            }
+            B[ri][s] = 'x';
+            s--;
+        }
+        if (stop) {
+            // くぼみから抜け出す
+            ri--;
+            while (ri >= 0) {
+                // 高さiの端を見つける
+                rep(i, N) {
+                    if (B[0][N - i - 1] == 'x') {
+                        s = N - i - 1;
+                        break;
+                    }
+                }
+
+                // くぼみから脱出できるか判定する
+                bool ok = false;
+                while (s >= 0) {
+                    if (B[ri][s] != 'T' && B[ri + 1][s] != 'T') {
+                        ok = true;
+                        break;
+                    } else if (B[ri][s] == 'T') {
+                        break;
+                    }
+                    B[ri][s] = 'x';
+                    s--;
+                }
+
+                if (ok) {
+                    break;
+                }
+                ri--;
+            }
+        }
+        B[ri][s] = 'x';
+
+        ri++;
+    }
+
+
+    return;
 }
 
 vector<Point> setInitTrent(vector<string> &B, const Point t, const Point p) {
     vector<Point> res;
     const int N = B.size();
 
-    auto load = setLoad(B);
+    setLoad(B);
 
     // bool isLeft = (p.second - t.second) > 0;
     vector<vector<Point>> initTrent = {
@@ -347,11 +453,13 @@ int main() {
     cin >> t;
     auto B = inputv<string>(N);
 
-    Point p = {-1, -1};
-    cin >> p;
-    updateFound(B);
+    // Point p = {-1, -1};
+    // cin >> p;
+    // updateFound(B);
 
-    printTrent(setInitTrent(B, t, p));
+    setLoad(B);
+    print(B);
+    // printTrent(setInitTrent(B, t, p));
 
     // while (p != Point{ti, tj}) {
     //     cin >> p;

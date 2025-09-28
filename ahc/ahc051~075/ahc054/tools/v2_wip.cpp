@@ -287,48 +287,141 @@ bool dfs(const Point cur, const Point g, const vector<string> &B) {
     return seen[g.first][g.second];
 }
 
+void setLoad(vector<string> &B) {
+    const int N = B.size();
+
+    int s = 0;
+    // 左端
+    rep(i, N) {
+        if (B[0][i] == '.') {
+            s = i;
+            break;
+        }
+    }
+    rep(i, N) {
+        B[i][s] = 'x';
+        while (s > 0 && B[i][s - 1] == '.') {
+            B[i][s - 1] = 'x';
+            s--;
+        }
+        bool stop = false;
+        while (i < N - 1) {
+            if (B[i][s] != 'T' && B[i + 1][s] != 'T') {
+                break;
+            } else if (B[i][s] == 'T') {
+                stop = true;
+                s--;
+                break;
+            }
+            B[i][s] = 'x';
+            s++;
+        }
+        // if (stop) {
+        //     int k[] = {0,1,2,3};
+        //     stack<Point> st;
+        //     st.push({i, s});
+        //     while (!st.empty()) {
+        //         auto p = st.top();
+        //         st.pop();
+        //         if (p.first == i + 1) {
+        //             s = p.second;
+        //         }
+        //         rep(d, 4) {
+        //             int ni = p.first + dy[k[d]];
+        //             int nj = p.second + dx[k[d]];
+        //             if (!ir(ni, N)
+        //               || !ir(nj, N)
+        //               || B[ni][nj] != '.') continue;
+        //             B[ni][nj] = 'x';
+        //             st.push({ni, nj});
+        //         }
+        //     }
+        // }
+        B[i][s] = 'x';
+    }
+
+    // 右端
+    rep(i, N) {
+        if (B[0][N - i - 1] == '.') {
+            s = N - i - 1;
+            break;
+        }
+    }
+    int ri = 0;
+    while (ri < N) {
+        B[ri][s] = 'x';
+        while (s < N - 1 && B[ri][s + 1] == '.') {
+            B[ri][s + 1] = 'x';
+            s++;
+        }
+        bool stop = false;
+        while (ri < N - 1) {
+            if (B[ri][s] != 'T' && B[ri + 1][s] != 'T') {
+                break;
+            } else if (B[ri][s] == 'T') {
+                stop = true;
+                s++;
+                break;
+            }
+            B[ri][s] = 'x';
+            s--;
+        }
+        if (stop) {
+            // くぼみから抜け出す
+            ri--;
+            while (ri >= 0) {
+                // 高さiの端を見つける
+                rep(i, N) {
+                    if (B[0][N - i - 1] == 'x') {
+                        s = N - i - 1;
+                        break;
+                    }
+                }
+
+                // くぼみから脱出できるか判定する
+                bool ok = false;
+                while (s >= 0) {
+                    if (B[ri][s] != 'T' && B[ri + 1][s] != 'T') {
+                        ok = true;
+                        break;
+                    } else if (B[ri][s] == 'T') {
+                        break;
+                    }
+                    B[ri][s] = 'x';
+                    s--;
+                }
+
+                if (ok) {
+                    break;
+                }
+                ri--;
+            }
+        }
+        B[ri][s] = 'x';
+
+        ri++;
+    }
+
+
+    return;
+}
+
 vector<Point> setInitTrent(vector<string> &B, const Point t, const Point p) {
     vector<Point> res;
     const int N = B.size();
 
+    setLoad(B);
+
     // bool isLeft = (p.second - t.second) > 0;
     vector<vector<Point>> initTrent = {
-        // 下開け
-        {{t.first - 1, t.second}, {t.first + 2, t.second}, {t.first, t.second - 1}, {t.first, t.second + 1}, {t.first + 1, t.second + 1}},
-        {{t.first - 1, t.second}, {t.first + 2, t.second}, {t.first, t.second - 1}, {t.first, t.second + 1}, {t.first + 1, t.second - 1}},
-        // 上開け
-        {{t.first - 2, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 1}, {t.first - 1, t.second + 1}},
-        {{t.first - 2, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 1}, {t.first - 1, t.second - 1}},
-        // 右開け
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 2}, {t.first + 1, t.second + 1}, {t.first - 1, t.second + 2}, {t.first - 2, t.second + 2}, {t.first - 3, t.second + 1}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 2}, {t.first - 1, t.second + 1}, {t.first + 1, t.second + 2}, {t.first + 2, t.second + 2}, {t.first + 3, t.second + 1}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 2}, {t.first - 1, t.second + 1}, {t.first + 1, t.second + 2}, {t.first + 2, t.second + 2}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 2}, {t.first + 1, t.second + 1}, {t.first - 1, t.second + 2}, {t.first - 2, t.second + 2}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 2}, {t.first - 1, t.second + 1}, {t.first + 1, t.second + 2}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 2}, {t.first + 1, t.second + 1}, {t.first - 1, t.second + 2}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 2}, {t.first - 1, t.second + 1}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 2}, {t.first + 1, t.second + 1}},
-        // 左開け
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 2}, {t.first, t.second + 1}, {t.first + 1, t.second - 1}, {t.first - 1, t.second - 2}, {t.first - 2, t.second - 2}, {t.first - 3, t.second - 1}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 2}, {t.first, t.second + 1}, {t.first - 1, t.second - 1}, {t.first + 1, t.second - 2}, {t.first + 2, t.second - 2}, {t.first + 3, t.second - 1}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 2}, {t.first, t.second + 1}, {t.first - 1, t.second - 1}, {t.first + 1, t.second - 2}, {t.first + 2, t.second - 2}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 2}, {t.first, t.second + 1}, {t.first + 1, t.second - 1}, {t.first - 1, t.second - 2}, {t.first - 2, t.second - 2}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 2}, {t.first, t.second + 1}, {t.first - 1, t.second - 1}, {t.first + 1, t.second - 2}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 2}, {t.first, t.second + 1}, {t.first + 1, t.second - 1}, {t.first - 1, t.second - 2}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 2}, {t.first, t.second + 1}, {t.first - 1, t.second - 1}},
-        {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 2}, {t.first, t.second + 1}, {t.first + 1, t.second - 1}},
-
-
-        // 下開け
         {{t.first - 1, t.second}, {t.first + 2, t.second}, {t.first, t.second - 1}, {t.first, t.second + 1}},
         {{t.first - 1, t.second},                          {t.first, t.second - 1}, {t.first, t.second + 1}},
-        // 左開け
+
         {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 2}, {t.first, t.second + 1}},
         {{t.first - 1, t.second}, {t.first + 1, t.second},                          {t.first, t.second + 1}},
-        // 右開け
         {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 2}},
         {{t.first - 1, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}},
-        // 上開け
+
         {{t.first - 2, t.second}, {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 1}},
         {                         {t.first + 1, t.second}, {t.first, t.second - 1}, {t.first, t.second + 1}},
     };
@@ -347,69 +440,7 @@ vector<Point> setInitTrent(vector<string> &B, const Point t, const Point p) {
 
         if (dfs(t, p, tmp)) {
             res.insert(res.end(), all(appended));
-            for (const auto &j : appended) {
-                B[j.first][j.second] = 'T';
-            }
             break;
-        }
-    }
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    // メルセンヌ・ツイスターの32ビット版
-    std::mt19937 gen(seed);
-    std::uniform_real_distribution<> uniform_real(0.0, nextafter(1.0, 0.0));
-
-    double init = 0.8, rate = init, diff = 0.2;
-    rep(i, N) {
-        rep(j, N) {
-            if (B[i][j] == 'T') {
-                rate = init;
-                continue;
-            }
-            if (i == t.first && j == t.second) {
-                rate -= diff;
-                continue;
-            }
-            if (j == p.second) {
-                rate -= diff;
-                continue;
-            }
-
-            // double dist = abs(i - t.first) + abs(j - t.second);
-            chmax(rate, 0.3);
-            if (uniform_real(gen) < rate) {
-                rate -= diff;
-                continue;
-            }
-
-            vector<Point> around;
-            rep(k, 4) {
-                int ni = i + dy[k];
-                int nj = j + dx[k];
-                if (!ir(ni, N) || !ir(nj, N) || B[ni][nj] == 'T') continue;
-                around.pb({ni, nj});
-            }
-
-            if (around.size() < 2) {
-                rate -= diff;
-                break;
-            }
-
-            auto tmp = B;
-            tmp[i][j] = 'T';
-            bool ok = true;
-            rep(k, around.size() - 1) {
-                if (!dfs(around[k], around[k + 1], tmp)) {
-                    ok = false;
-                    break;
-                }
-            }
-            if (ok && dfs(p, t, tmp)) {
-                res.pb({i, j});
-                B[i][j] = 'T';
-                rate = init;
-            } else {
-                rate -= diff;
-            }
         }
     }
 
@@ -422,13 +453,12 @@ int main() {
     cin >> t;
     auto B = inputv<string>(N);
 
-    Point p = {-1, -1};
-    cin >> p;
-    updateFound(B);
+    // Point p = {-1, -1};
+    // cin >> p;
+    // updateFound(B);
 
-    // print(B);
-
-    printTrent(setInitTrent(B, t, p));
+    setLoad(B);
+    print(B);
     // printTrent(setInitTrent(B, t, p));
 
     // while (p != Point{ti, tj}) {

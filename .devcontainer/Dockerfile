@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/javascript-node:20-bookworm
+FROM node:26-slim
 
 ENV SHELL=/bin/bash
 
@@ -15,3 +15,5 @@ ENV CPLUS_INCLUDE_PATH="/lib/ac-library"
 RUN pip3 install online-judge-tools
 
 RUN npm install -g atcoder-cli
+
+WORKDIR /workspace

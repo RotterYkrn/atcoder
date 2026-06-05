@@ -1,14 +1,16 @@
 services:
-    atcoder:build:
-      context: .
-      dockerfile: Dockerfile
-    stdin_open: true
-    tty: true
-    volumes:
-      - ..:/workspace:cached
-      # rootユーザーのディレクトリに変更して永続化
-      - atcoder-cli-config:/root/.config/atcoder-cli
-      - oj-config:/root/.local/share/online-judge-tools
+    atcoder:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: atcoder
+        stdin_open: true
+        tty: true
+        volumes:
+            - ..:/workspace:cached
+            # rootユーザーのディレクトリに変更して永続化
+            - atcoder-cli-config:/root/.config/atcoder-cli
+            - oj-config:/root/.local/share/online-judge-tools
 
 volumes:
   atcoder-cli-config:

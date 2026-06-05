@@ -7,13 +7,14 @@ RUN apt update && apt install -y \
     git \
     python3 \
     python3-pip
+    
+RUN pip3 install --break-system-packages setuptools
+RUN pip3 install --break-system-packages online-judge-tools
+
+RUN npm install -g atcoder-cli
 
 RUN git clone https://github.com/atcoder/ac-library.git /lib/ac-library
 ENV CPLUS_INCLUDE_PATH="/lib/ac-library"
 # ENV CPLUS_INCLUDE_PATH="/lib/ac-library:/opt/boost/bin:/usr/include/eigen3"
-
-RUN pip3 install online-judge-tools
-
-RUN npm install -g atcoder-cli
 
 WORKDIR /workspace

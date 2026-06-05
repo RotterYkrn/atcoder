@@ -23,5 +23,6 @@ ENV CPLUS_INCLUDE_PATH="/lib/ac-library"
 # ENV CPLUS_INCLUDE_PATH="/lib/ac-library:/opt/boost/bin:/usr/include/eigen3"
 
 COPY .bash_aliases /root/.bash_aliases
+RUN source /root/.bash_aliases 
 
 WORKDIR /workspace

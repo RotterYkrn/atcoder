@@ -22,6 +22,7 @@ RUN git clone https://github.com/atcoder/ac-library.git /lib/ac-library
 ENV CPLUS_INCLUDE_PATH="/lib/ac-library"
 # ENV CPLUS_INCLUDE_PATH="/lib/ac-library:/opt/boost/bin:/usr/include/eigen3"
 
+RUN echo "if [ -f ~/.bash_aliases ]; then . ~/.bash_aliases; fi" >> /root/.bashrc
 COPY .bash_aliases /root/.bash_aliases
 
 WORKDIR /workspace

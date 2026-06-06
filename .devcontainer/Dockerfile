@@ -1,11 +1,13 @@
-FROM node:26-slim
+FROM ubuntu:24.04
 
 RUN apt update && apt install -y \
-    build-essential \
-    time \
-    git \
-    python3.13 \
-    python3-pip \
+        build-essential \
+        time \
+        git \
+        python3.13 \
+        python3-pip \
+        nodejs \
+        npm \
     && apt autoremove -y \
     && apt autoclean -y
 
@@ -28,12 +30,12 @@ COPY .bash_aliases /root/.bash_aliases
 
 ENV SHELL=/bin/bash
 RUN ( \
-  echo ""; \
-  echo "# --- Terminal Color & Clean Hostname ---"; \
-  echo "export TERM=xterm-256color"; \
-  echo "export PS1='\[\e[31m\]\u\[\e[m\]:\[\e[34m\]\w\[\e[m\]$ '"; \
-  echo "alias ls='ls --color=auto'"; \
-  echo "alias ll='ls -l --color=auto'"; \
+    echo ""; \
+    echo "# --- Terminal Color & Clean Hostname ---"; \
+    echo "export TERM=xterm-256color"; \
+    echo "export PS1='\[\e[31m\]\u\[\e[m\]:\[\e[34m\]\w\[\e[m\]$ '"; \
+    echo "alias ls='ls --color=auto'"; \
+    echo "alias ll='ls -l --color=auto'"; \
 ) >> /root/.bashrc
 
 WORKDIR /workspace

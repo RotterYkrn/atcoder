@@ -2,10 +2,13 @@ FROM node:26-slim
 
 RUN apt update && apt install -y \
     build-essential \
+    time \
     git \
     python3.13 \
-    python3-pip
-    
+    python3-pip \
+    && apt autoremove -y \
+    && apt autoclean -y
+
 RUN pip3 install --break-system-packages setuptools
 RUN pip3 install --break-system-packages online-judge-tools
 COPY atcoder.py /usr/local/lib/python3.13/dist-packages/onlinejudge/service/atcoder.py

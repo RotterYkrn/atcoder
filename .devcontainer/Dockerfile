@@ -1,19 +1,17 @@
-FROM ubuntu:24.04
+FROM node:26-slim
 
 RUN apt update && apt install -y \
         build-essential \
         time \
         git \
-        python3.12 \
+        python3.13 \
         python3-pip \
-        nodejs \
-        npm \
     && apt autoremove -y \
     && apt autoclean -y
 
 RUN pip3 install --break-system-packages setuptools
 RUN pip3 install --break-system-packages online-judge-tools
-COPY atcoder.py /usr/local/lib/python3.12/dist-packages/onlinejudge/service/atcoder.py
+COPY atcoder.py /usr/local/lib/python3.13/dist-packages/onlinejudge/service/atcoder.py
 
 RUN npm install -g atcoder-cli
 RUN echo 'if [ ! -f ~/.config/atcoder-cli-nodejs/config.json ]; then mkdir -p ~/.config/atcoder-cli-nodejs && cp -r /tmp/atcoder-cli-nodejs/* ~/.config/atcoder-cli-nodejs/; fi' >> /root/.bashrc

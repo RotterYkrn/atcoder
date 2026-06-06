@@ -12,7 +12,9 @@
                 "streetsidesoftware.code-spell-checker",
                 "MS-CEINTL.vscode-language-pack-ja",
                 "esbenp.prettier-vscode",
-                "Codeium.codeium"
+                "Codeium.codeium",
+                "ms-azuretools.vscode-docker",
+                "saoudrizwan.claude-dev"
             ]
         }
     }

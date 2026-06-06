@@ -7,15 +7,12 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "ms-vscode.cpptools",
-                "ms-vscode.cpp-devtools",
                 "ms-vscode.cpptools-extension-pack",
-                "ms-vscode.cmake-tools",
+                "ms-vscode.cpptools-themes",
                 "streetsidesoftware.code-spell-checker",
                 "MS-CEINTL.vscode-language-pack-ja",
                 "esbenp.prettier-vscode",
-                "Codeium.codeium",
-                "ms-vscode.cpptools-themes"
+                "Codeium.codeium"
             ]
         }
     }

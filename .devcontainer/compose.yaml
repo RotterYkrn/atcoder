@@ -8,9 +8,9 @@ services:
         tty: true
         volumes:
             - ..:/workspace:cached
-            - acc-session:/root/.config/atcoder-cli-nodejs/session.json
+            - acc-config:/root/.config/atcoder-cli-nodejs
             - oj-config:/root/.local/share/online-judge-tools
 
 volumes:
-  acc-session:
+  acc-config:
   oj-config:

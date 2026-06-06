@@ -13,8 +13,8 @@ RUN pip3 install --break-system-packages online-judge-tools
 COPY atcoder.py /usr/local/lib/python3.13/dist-packages/onlinejudge/service/atcoder.py
 
 RUN npm install -g atcoder-cli
-RUN mkdir -p /root/.config/atcoder-cli-nodejs
-COPY config/ /root/.config/atcoder-cli-nodejs/
+RUN echo 'if [ ! -f ~/.config/atcoder-cli-nodejs/config.json ]; then mkdir -p ~/.config/atcoder-cli-nodejs && cp -r /tmp/atcoder-cli-nodejs/* ~/.config/atcoder-cli-nodejs/; fi' >> /root/.bashrc
+COPY atcoder-cli-nodejs/ /tmp/atcoder-cli-nodejs/
 
 RUN pip3 install --break-system-packages aclogin
 

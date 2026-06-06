@@ -1,19 +1,9 @@
 FROM node:26-slim
 
-ENV SHELL=/bin/bash
-RUN ( \
-  echo ""; \
-  echo "# --- Terminal Color & Clean Hostname ---"; \
-  echo "export TERM=xterm-256color"; \
-  echo "export PS1='\[\e[31m\]\u\[\e[m\]:\[\e[34m\]\w\[\e[m\]$ '"; \
-  echo "alias ls='ls --color=auto'"; \
-  echo "alias ll='ls -l --color=auto'"; \
-) >> /root/.bashrc
-
 RUN apt update && apt install -y \
     build-essential \
     git \
-    python3 \
+    python3.13 \
     python3-pip
     
 RUN pip3 install --break-system-packages setuptools
@@ -32,5 +22,15 @@ ENV CPLUS_INCLUDE_PATH="/lib/ac-library"
 
 RUN echo "if [ -f ~/.bash_aliases ]; then . ~/.bash_aliases; fi" >> /root/.bashrc
 COPY .bash_aliases /root/.bash_aliases
+
+ENV SHELL=/bin/bash
+RUN ( \
+  echo ""; \
+  echo "# --- Terminal Color & Clean Hostname ---"; \
+  echo "export TERM=xterm-256color"; \
+  echo "export PS1='\[\e[31m\]\u\[\e[m\]:\[\e[34m\]\w\[\e[m\]$ '"; \
+  echo "alias ls='ls --color=auto'"; \
+  echo "alias ll='ls -l --color=auto'"; \
+) >> /root/.bashrc
 
 WORKDIR /workspace

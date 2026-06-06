@@ -1,14 +1,14 @@
 alias upapt="sudo apt update && sudo apt upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y"
 
-alias g+="g++-12 -std=gnu++2b -O2 -DONLINE_JUDGE -DATCODER \
--Wall -Wextra -mtune=native -march=native \
+alias g+="g++ -std=gnu++23 -O2 -DONLINE_JUDGE -DATCODER \
+-Wall -Wextra -mtune=native -march=native -ftrivial-auto-var-init=zero \
 -fconstexpr-depth=2147483647 -fconstexpr-loop-limit=2147483647 \
 -fconstexpr-ops-limit=2147483647 main.cpp"
 
 function db() {
-    g++-12 -std=gnu++2b -O2 -DONLINE_JUDGE -DATCODER -Wall -Wextra -mtune=native -march=native -fconstexpr-depth=2147483647 -fconstexpr-loop-limit=2147483647 -fconstexpr-ops-limit=2147483647 -g -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC main.cpp
+    g++ -std=gnu++23 -O2 -DONLINE_JUDGE -DATCODER -Wall -Wextra -mtune=native -march=native -ftrivial-auto-var-init=zero -fconstexpr-depth=2147483647 -fconstexpr-loop-limit=2147483647 -fconstexpr-ops-limit=2147483647 -g -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC main.cpp
     ./a.out 2>&1 | awk "/Error: /{print; getline; print}"
-    g++-12 -std=gnu++2b -DONLINE_JUDGE -DATCODER -Wall -Wextra -mtune=native -march=native -fconstexpr-depth=2147483647 -fconstexpr-loop-limit=2147483647 -fconstexpr-ops-limit=2147483647 -g -fstack-protector -fsanitize=address -fsanitize=undefined main.cpp
+    g++ -std=gnu++23 -DONLINE_JUDGE -DATCODER -Wall -Wextra -mtune=native -march=native -ftrivial-auto-var-init=zero -fconstexpr-depth=2147483647 -fconstexpr-loop-limit=2147483647 -fconstexpr-ops-limit=2147483647 -g -fstack-protector -fsanitize=address -fsanitize=undefined main.cpp
     ./a.out 2>&1 | grep "/main.cpp"
 }
 

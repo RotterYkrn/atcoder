@@ -5,19 +5,19 @@ RUN apt update && apt install -y \
         time \
         git \
         python3.13 \
-        python3-pip \
+        pipx \
     && apt autoremove -y \
     && apt autoclean -y
 
-RUN pip3 install --break-system-packages setuptools
-RUN pip3 install --break-system-packages online-judge-tools
+# RUN pipx install setuptools
+RUN pipx install online-judge-tools
 COPY atcoder.py /usr/local/lib/python3.13/dist-packages/onlinejudge/service/atcoder.py
 
 RUN npm install -g atcoder-cli
 RUN echo 'if [ ! -f ~/.config/atcoder-cli-nodejs/config.json ]; then mkdir -p ~/.config/atcoder-cli-nodejs && cp -r /tmp/atcoder-cli-nodejs/* ~/.config/atcoder-cli-nodejs/; fi' >> /root/.bashrc
 COPY atcoder-cli-nodejs/ /tmp/atcoder-cli-nodejs/
 
-RUN pip3 install --break-system-packages aclogin
+RUN pipx install aclogin
 
 RUN git clone https://github.com/atcoder/ac-library.git /lib/ac-library
 ENV CPLUS_INCLUDE_PATH="/lib/ac-library"

@@ -7,7 +7,8 @@ RUN apt update && apt install -y \
         python3.13 \
         pipx \
     && apt autoremove -y \
-    && apt autoclean -y
+    && apt autoclean -y \
+    && pipx ensurepath
 
 # RUN pipx install setuptools
 RUN pipx install online-judge-tools

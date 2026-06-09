@@ -11,15 +11,15 @@ RUN apt update && apt install -y \
     && pipx ensurepath
 
 # RUN pipx install setuptools
-RUN pipx install online-judge-tools && \
-    pipx inject online-judge-tools setuptools
+RUN pipx install --no-cache online-judge-tools && \
+    pipx inject --no-cache online-judge-tools setuptools
 COPY atcoder.py /root/.local/share/pipx/venvs/online-judge-tools/lib/python3.13/site-packages/onlinejudge/service/atcoder.py
 
 RUN npm install -g atcoder-cli
 RUN echo 'if [ ! -f ~/.config/atcoder-cli-nodejs/config.json ]; then mkdir -p ~/.config/atcoder-cli-nodejs && cp -r /tmp/atcoder-cli-nodejs/* ~/.config/atcoder-cli-nodejs/; fi' >> /root/.bashrc
 COPY atcoder-cli-nodejs/ /tmp/atcoder-cli-nodejs/
 
-RUN pipx install aclogin
+RUN pipx install --no-cache aclogin
 
 RUN git clone https://github.com/atcoder/ac-library.git /lib/ac-library
 ENV CPLUS_INCLUDE_PATH="/lib/ac-library"

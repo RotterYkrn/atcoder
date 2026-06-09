@@ -540,7 +540,11 @@ class AtCoderProblemData(ProblemData):
         if tds[3].text.endswith(' KB'):
             memory_limit_byte = int(float(utils.remove_suffix(tds[3].text, ' KB')) * 1000)
         elif tds[3].text.endswith(' MB'):
-            memory_limit_byte = int(float(utils.remove_suffix(tds[3].text, ' MB')) * 1000 * 1000)  # TODO: confirm this is MB truly, not MiB
+            memory_limit_byte = int(float(utils.remove_suffix(tds[3].text, ' MB')) * 1000 * 1000)
+        elif tds[3].text.endswith(' KiB'):
+            memory_limit_byte = int(float(utils.remove_suffix(tds[3].text, ' KiB')) * 1024)
+        elif tds[3].text.endswith(' MiB'):
+            memory_limit_byte = int(float(utils.remove_suffix(tds[3].text, ' MiB')) * 1024 * 1024)
         else:
             assert False
         if len(tds) == 5:

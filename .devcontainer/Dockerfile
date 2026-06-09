@@ -11,7 +11,7 @@ RUN apt update && apt install -y \
     && pipx ensurepath
 
 # RUN pipx install setuptools
-RUN pipx install online-judge-tools==12.0.0 && \
+RUN pipx install git+https://github.com/online-judge-tools/oj.git && \
     pipx inject online-judge-tools setuptools
 COPY atcoder.py /root/.local/share/pipx/venvs/online-judge-tools/lib/python3.13/site-packages/onlinejudge/service/atcoder.py
 

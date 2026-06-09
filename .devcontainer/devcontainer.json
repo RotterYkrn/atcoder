@@ -1,5 +1,5 @@
 {
-    "name": "AtCoder C++ Environment",
+    "name": "AtCoder Environment",
     "dockerComposeFile": "compose.yaml",
     "service": "atcoder",
     "workspaceFolder": "/workspace",

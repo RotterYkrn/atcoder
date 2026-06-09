@@ -10,7 +10,7 @@ RUN apt update && apt install -y \
     && apt autoclean -y \
     && pipx ensurepath
 
-RUN pipx install git+https://github.com/online-judge-tools/oj.git && \
+RUN pipx install git+https://github.com/online-judge-tools/oj.git
 # RUN pipx install setuptools
 # RUN pipx install git+https://github.com/online-judge-tools/oj.git && \
 #     pipx inject online-judge-tools setuptools

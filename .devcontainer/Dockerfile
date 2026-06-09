@@ -12,7 +12,7 @@ RUN apt update && apt install -y \
 
 # RUN pipx install setuptools
 RUN pipx install --no-cache online-judge-tools && \
-    pipx inject --no-cache online-judge-tools setuptools
+    pipx inject online-judge-tools setuptools
 COPY atcoder.py /root/.local/share/pipx/venvs/online-judge-tools/lib/python3.13/site-packages/onlinejudge/service/atcoder.py
 
 RUN npm install -g atcoder-cli

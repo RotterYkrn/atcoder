@@ -11,10 +11,7 @@ RUN apt update && apt install -y \
     && pipx ensurepath
 
 RUN pipx install git+https://github.com/online-judge-tools/oj.git
-# RUN pipx install setuptools
-# RUN pipx install git+https://github.com/online-judge-tools/oj.git && \
-#     pipx inject online-judge-tools setuptools
-# COPY atcoder.py /root/.local/share/pipx/venvs/online-judge-tools/lib/python3.13/site-packages/onlinejudge/service/atcoder.py
+COPY atcoder.py /root/.local/share/pipx/venvs/online-judge-tools/lib/python3.13/site-packages/onlinejudge/service/atcoder.py
 
 RUN npm install -g atcoder-cli
 RUN echo 'if [ ! -f ~/.config/atcoder-cli-nodejs/config.json ]; then mkdir -p ~/.config/atcoder-cli-nodejs && cp -r /tmp/atcoder-cli-nodejs/* ~/.config/atcoder-cli-nodejs/; fi' >> /root/.bashrc

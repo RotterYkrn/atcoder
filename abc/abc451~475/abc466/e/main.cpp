@@ -264,8 +264,23 @@ int main() {
         sub[i] = A[i] - B[i];
     }
 
-    auto cum = CumulativeSumArray1<ll>(sub);
-    
+
+    vector<pll> sub2;
+    if (sub[0] < 0) {
+        sub2.push_back({-1, 0});
+    }
+    ll l = 0, cnt = sub[0];
+    rep(i, 1, N) {
+        if (sub[i - 1] / abs(sub[i - 1]) != sub[i] / abs(sub[i])) {
+            sub2.push_back({l, cnt});
+            l = i;
+            cnt = 0;
+        }
+        cnt += sub[i];
+    }
+    sub2.push_back({l, cnt});
+
+    auto cum = CumulativeSumArray1<ll>(sub2);
 
     return 0;
 }

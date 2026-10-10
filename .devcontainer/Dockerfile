@@ -31,7 +31,7 @@ RUN ( \
     echo ""; \
     echo "# --- Terminal Color & Clean Hostname ---"; \
     echo "export TERM=xterm-256color"; \
-    echo "export PS1='\[\e[31m\]\u\[\e[m\]:\[\e[34m\]\w\[\e[m\]$ '"; \
+    echo "export PS1='\[\e[32m\]\u\[\e[m\]:\[\e[34m\]\w\[\e[m\]$ '"; \
     echo "alias ls='ls --color=auto'"; \
     echo "alias ll='ls -l --color=auto'"; \
 ) >> /root/.bashrc

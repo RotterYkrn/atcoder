@@ -25,9 +25,9 @@ using vs = vector<string>;
 
 #define OVERLOAD_MACRO(_1, _2, _3, name, ...) name
 // loop [begin,end)
-#define REP0(end)           for (auto _ = decay_t<decltype(end)>{};      (_) != (end); ++(_))
-#define REP1(i, end)        for (auto i = decay_t<decltype(end)>{};      (i) != (end); ++(i))
-#define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) != (end); ++(i))
+#define REP0(end)           for (auto _ = decay_t<decltype(end)>{};      (_) < (end); ++(_))
+#define REP1(i, end)        for (auto i = decay_t<decltype(end)>{};      (i) < (end); ++(i))
+#define REP2(i, begin, end) for (auto i = decay_t<decltype(end)>{begin}; (i) < (end); ++(i))
 #define rep(...) OVERLOAD_MACRO(__VA_ARGS__, REP2, REP1, REP0)(__VA_ARGS__)
 // reveres loop [rend,rbegin)
 #define RREP1(i, rbegin)       for (auto i = (rbegin - 1); (i) >= decay_t<decltype(rbegin)>{};     --(i))
@@ -78,20 +78,20 @@ template <class T>
 inline constexpr bool is_container_v = is_container<T>::value;
 
 /***************************************
- mkvec<type>(n or {n1,n2,...}[, init])
+ mkv<type>(n or {n1,n2,...}[, init])
 ****************************************/
-template<class T>
-inline auto mkvec(const auto d, const T &init = T{}) {
+template<class T = long long>
+inline auto mkv(const auto d, const T &init = T{ }) {
     return vector<T>(d, init);
 }
-template<class T, size_t n, size_t idx = 0>
-auto mkvec(const auto (&d)[n], const T &init = T{}) {
-    if constexpr (idx < n - 1) return vector(d[idx], mkvec<T, n, idx + 1>(d, init));
-    else return mkvec<T>(d[idx], init);
+template<class T = long long, size_t n, size_t idx = 0>
+auto mkv(const auto (&d)[n], const T &init = T{ }) {
+    if constexpr (idx < n - 1) return vector(d[idx], mkv<T, n, idx + 1>(d, init));
+    else return mkv<T>(d[idx], init);
 }
 
 /***************************************
- pairとコンテナを簡単に出力できるようにした
+ pairとvectorを簡単に出力できるようにした
 ****************************************/
 template<class First, class Second>
 ostream &operator<<(ostream &os, const pair<First, Second> &p) {
@@ -131,35 +131,35 @@ void input_cin(First &first, Rest&... rest) {
     cin >> first;
     input_cin(rest...);
 }
-#define inputi(...)    int __VA_ARGS__; input_cin(__VA_ARGS__);
-#define inputll(...)    ll __VA_ARGS__; input_cin(__VA_ARGS__);
-#define inputc(...)   char __VA_ARGS__; input_cin(__VA_ARGS__);
-#define inputs(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
+// #define inputi(...)    int __VA_ARGS__; input_cin(__VA_ARGS__);
+#define inn(...)     ll __VA_ARGS__; input_cin(__VA_ARGS__);
+#define inc(...)   char __VA_ARGS__; input_cin(__VA_ARGS__);
+#define ins(...) string __VA_ARGS__; input_cin(__VA_ARGS__);
 template<class First, class Second>
 istream &operator>>(istream &in, pair<First, Second> &p) {
     in >> p.first >> p.second;
     return in;
 }
-template <class T>
-inline auto inputv(const auto d) {
+template <class T = long long>
+inline auto inv(const auto d) {
     vector<T> vec(d);
     for (auto &i : vec) {
         cin >> i;
     }
     return vec;
 }
-template<class T, class D, size_t n, size_t idx = 0>
-auto inputv(const D(&d)[n]) {
+template<class T = long long, class D, size_t n, size_t idx = 0>
+auto inv(const D(&d)[n]) {
     if constexpr (idx < n - 1) {
         D d_make[n - idx];
         copy(begin(d) + idx, end(d), begin(d_make));
-        auto vec = mkvec<T>(d_make);
+        auto vec = mkv<T>(d_make);
         for (auto &i : vec) {
-            i = inputv<T, D, n, idx + 1>(d);
+            i = inv<T, D, n, idx + 1>(d);
         }
         return vec;
     } else {
-        return inputv<T>(d[idx]);
+        return inv<T>(d[idx]);
     }
 }
 
@@ -231,12 +231,26 @@ T min(const vector<vector<T>> v) {
     return minValue;
 }
 
+/**********************************
+ unordered_setなどに使うハッシュ定義
+***********************************/
+struct PairHash {
+    template <class T1, class T2>
+    size_t operator()(const pair<T1, T2> &p) const {
+        auto h1 = hash<T1>{ }(p.first);
+        auto h2 = hash<T2>{ }(p.second);
+        return h1 ^ (h2 << 1);
+    }
+};
+
 #ifdef __TEMPLATE__
 #pragma endregion template
 #endif
 
 
 int main() {
+    auto A = inv(1);
+    print(A);
 
     return 0;
 }

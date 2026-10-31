@@ -107,6 +107,7 @@
         "inputc",
         "inputi",
         "inputll",
+        "inputn",
         "inputv",
         "modint",
         "noexcept",

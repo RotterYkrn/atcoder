@@ -249,8 +249,7 @@ struct PairHash {
 
 
 int main() {
-    auto A = inv(1);
-    print(A);
+
 
     return 0;
 }
